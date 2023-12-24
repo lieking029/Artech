@@ -1,0 +1,2045 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Runway REST API",
+        "description": "
+        
+        # About Runway
+
+        Runway (runway.team) is a release management platform for mobile app teams. Top mobile teams like Gusto, Faire, Wealthsimple, and Mercari use Runway to track, automate, and collaborate on their app releases. For more information, visit [our website](https://runway.team).
+       
+        # Introduction
+        
+        Welcome to the Runway API and webhooks documentation! The REST API allows you to access information about your releases in Runway. You can also subscribe to webhook events sent by Runway. To get started, create an API key from your organization's dashboard – you'll use this key to authenticate requests to the API.
+        
+        ## Authentication
+        
+        All Runway REST API endpoints are authenticated via an API key passed as an `X-API-Key` header like so:
+        \n\n
+        ```
+        X-API-Key: {YOUR_API_KEY}
+        ```
+        \n\n
+        API keys are created from your organization's dashboard.
+        
+        ## Schema
+        
+        The Runway REST API is accessed via HTTPS, with a base URL of `https://api.runway.team/v1`. All data is sent and received as JSON. Unless otherwise stated, dates are sent and received in the JSON Schema Validation [date-time format](https://datatracker.ietf.org/doc/html/rfc3339#section-5.6), in UTC.
+        \n\n
+        Most Runway REST API endpoints require one or more path parameters that correspond to the `id`s of various entities, like app and release. You can find your app's identifier in the Overview section of your app's Settings. To construct a release identifier for an existing release in an app, combine the app identifier with the release version like so: `{appId}:{version}`. For example, the release identifier of a release with version `1.1.0` on an app with an app identifier `myapp-ios` would be `myapp-ios:1.1.0`.
+        
+        ## Rate limiting
+        
+        Requests to the API will be limited to 50 requests per second.",
+        "version": "1.0.0",
+        "x-logo": {
+            "url": "https://runway-img.s3.us-east-2.amazonaws.com/wordmark_runway_redoc.svg",
+            "altText": "Runway logo"
+        }
+    },
+    "security": [
+        {
+            "apiKey": []
+        }
+    ],
+    "servers": [
+        {
+            "url": "https://api.runway.team/v1",
+            "description": "The production Runway server"
+        }
+    ],
+    "paths": {
+        "/app/{appId}/release": {
+            "get": {
+                "summary": "List releases",
+                "operationId": "listReleases",
+                "tags": [
+                    "release"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/appId"
+                    },
+                    {
+                        "name": "timelinePhase",
+                        "in": "query",
+                        "description": "Filter releases by timeline phase",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/components/schemas/ReleaseTimelinePhase"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/releasesResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/notFoundErrorResponse"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create a new release",
+                "operationId": "createRelease",
+                "tags": [
+                    "release"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/appId"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/createRelease",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/releaseResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/notFoundErrorResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/badRequestErrorResponse"
+                    }
+                }
+            }
+        },
+        "/app/{appId}/approval": {
+            "post": {
+                "summary": "Create approval item",
+                "operationId": "createApproval",
+                "tags": [
+                    "approval"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/appId"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/createApproval",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/checklistItemResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/notFoundErrorResponse"
+                    }
+                }
+            }
+        },
+        "/app/{appId}/checklistItem": {
+            "post": {
+                "summary": "Create step checklist item",
+                "operationId": "createChecklistItem",
+                "tags": [
+                    "checklistItem"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/appId"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/createChecklistItem",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/checklistItemResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/notFoundErrorResponse"
+                    }
+                }
+            }
+        },
+        "/app/{appId}/release/{releaseId}": {
+            "description": "Create, read, update, and delete for a release",
+            "get": {
+                "summary": "Get the details of a Runway release",
+                "operationId": "getReleaseById",
+                "tags": [
+                    "release"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/releaseId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/appId"
+                    }
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/releaseResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/notFoundErrorResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/badRequestErrorResponse"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update a Runway release",
+                "operationId": "updateReleaseById",
+                "tags": [
+                    "release"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/releaseId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/appId"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/updateRelease",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "The details of a release",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReleaseEntity"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/notFoundErrorResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/badRequestErrorResponse"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a Runway release",
+                "operationId": "deleteReleaseById",
+                "tags": [
+                    "release"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/releaseId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/appId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delete release response"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/notFoundErrorResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/badRequestErrorResponse"
+                    }
+                }
+            }
+        },
+        "/app/{appId}/release/{releaseId}/skip": {
+            "description": "Skip a Runway release",
+            "put": {
+                "summary": "Skip a Runway release",
+                "operationId": "skipRelease",
+                "tags": [
+                    "release"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/releaseId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/appId"
+                    }
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/releaseResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/notFoundErrorResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/badRequestErrorResponse"
+                    }
+                }
+            }
+        },
+        "/app/{appId}/release/{releaseId}/unskip": {
+            "description": "Un-skip a Runway release",
+            "put": {
+                "summary": "Un-skip a Runway release",
+                "operationId": "unskipRelease",
+                "tags": [
+                    "release"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/releaseId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/appId"
+                    }
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/releaseResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/notFoundErrorResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/badRequestErrorResponse"
+                    }
+                }
+            }
+        },
+        "/app/{appId}/release/{releaseId}/checklistItem/{checklistItemId}/status": {
+            "put": {
+                "summary": "Update checklist item status",
+                "operationId": "updateChecklistItemStatus",
+                "tags": [
+                    "checklistItem"
+                ],
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/appId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/releaseId"
+                    },
+                    {
+                        "$ref": "#/components/parameters/checklistItemId"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/updateChecklistItemStatus",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/checklistItemResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/notFoundErrorResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/badRequestErrorResponse"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "release",
+            "description": "Operations to Runway releases",
+            "x-displayName": "Release"
+        },
+        {
+            "name": "checklistItem",
+            "description": "Operations to checklist items",
+            "x-displayName": "Checklist item"
+        },
+        {
+            "name": "approval",
+            "description": "Operations to approval items",
+            "x-displayName": "Approval items"
+        },
+        {
+            "name": "webhooks",
+            "description": "The webhooks Runway sends to notify you of events.",
+            "x-displayName": "Event types"
+        },
+        {
+            "name": "WebhookPayload",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/WebhookPayload" />,
+        },
+        {
+            "name": "WebhookReleasePayload",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/WebhookReleasePayload" />,
+        },
+        {
+            "name": "WebhookReleaseStepsPayload",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/WebhookReleaseStepsPayload" />,
+        },
+        {
+            "name": "WebhookAppStoreVersionDataPayload",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/WebhookAppStoreVersionDataPayload" />,
+        },
+        {
+            "name": "WebhookCIBuildPayload",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/WebhookCIBuildPayload" />,
+        },
+        {
+            "name": "WebhookChecklistItemPayload",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/WebhookChecklistItemPayload" />,
+        },
+        {
+            "name": "AppStoreVersionData",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/AppStoreVersionData" />,
+        },
+        {
+            "name": "AppEntity",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/AppEntity" />,
+        },
+        {
+            "name": "AppPlatform",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/AppPlatform" />,
+        },
+        {
+            "name": "ReleaseStatus",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/ReleaseStatus" />,
+        },
+        {
+            "name": "ReleaseType",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/ReleaseType" />,
+        },
+        {
+            "name": "ReleaseTimelinePhase",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/ReleaseTimelinePhase" />,
+        },
+        {
+            "name": "ReleaseStepType",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/ReleaseStepType" />,
+        },
+        {
+            "name": "ReleaseEntity",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/ReleaseEntity" />,
+        },
+        {
+            "name": "ReleaseStepStatus",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/ReleaseStepStatus" />,
+        },
+        {
+            "name": "ReleaseStepEntity",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/ReleaseStepEntity" />,
+        },
+        {
+            "name": "ChecklistItemStatusType",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/ChecklistItemStatusType" />,
+        },
+        {
+            "name": "ChecklistItemStatus",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/ChecklistItemStatus" />,
+        },
+        {
+            "name": "UserRole",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/UserRole" />,
+        },
+        {
+            "name": "ChecklistItemEntity",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/ChecklistItemEntity" />,
+        },
+        {
+            "name": "ChecklistItemPlacement",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/ChecklistItemPlacement" />,
+        },
+        {
+            "name": "GoogleStagedRollout",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/GoogleStagedRollout" />,
+        },
+        {
+            "name": "GooglePlayVersionState",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/GooglePlayVersionState" />,
+        },
+        {
+            "name": "GooglePlayStoreData",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/GooglePlayStoreData" />,
+        },
+        {
+            "name": "ApplePhasedRelease",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/ApplePhasedRelease" />,
+        },
+        {
+            "name": "AppStoreDataType",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/AppStoreDataType" />,
+        },
+        {
+            "name": "AppleAppStoreData",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/AppleAppStoreData" />,
+        },
+        {
+            "name": "CIBuildEntity",
+            "description": <SchemaDefinition schemaRef="#/components/schemas/CIBuildEntity" />,
+        }
+    ],
+    "x-tagGroups": [
+        {
+            "name": "REST API",
+            "tags": ["release", "checklistItem", "approval"]
+        },
+        {
+            "name": "Webhooks",
+            "tags": ["webhooks"]
+        },
+        {
+            "name": "Webhook Payload Schemas",
+            "tags": [
+                "WebhookPayload",
+                "WebhookReleasePayload",
+                "WebhookChecklistItemPayload",
+                "WebhookAppStoreVersionDataPayload",
+                "WebhookReleaseStepsPayload",
+                "WebhookCIBuildPayload",
+            ]
+        },
+        {
+            "name": "Models",
+            "tags": [
+                "AppEntity",
+                "ReleaseEntity",
+                "ReleaseStepEntity",
+                "ChecklistItemEntity",
+                "AppleAppStoreData",
+                "GooglePlayStoreData",
+                "GooglePlayVersionState",
+                "GoogleStagedRollout",
+                "ApplePhasedRelease",
+                "ChecklistItemPlacement",
+                "ChecklistItemEntity",
+                "UserRole",
+                "ChecklistItemStatus",
+                "ChecklistItemStatusType",
+                "ReleaseType",
+                "ReleaseStatus",
+                "AppPlatform",
+                "CIBuildEntity"
+            ]
+        }
+    ],
+    "webhooks": {
+        "release.kickedOff": {
+            "post": {
+                "summary": "release.kickedOff",
+                "description": "When a release is kicked off. All platforms.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/WebhookPayload"
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "payload": {
+                                                "$ref": "#/components/schemas/WebhookReleasePayload"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "release.submitted": {
+            "post": {
+                "summary": "release.submitted",
+                "description": "When an app update was submitted for review. iOS and Android platforms only.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                }, {
+                                    "type": "object",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookReleasePayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "release.released": {
+            "post": {
+                "summary": "release.released",
+                "description": "When an app update was released to users. iOS platforms only.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                }, {
+                                    "type": "object",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookReleasePayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "release.created": {
+            "post": {
+                "summary": "release.created",
+                "description": "When a new release was drafted in Runway. All platforms.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                }, {
+                                    "type": "object",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookReleasePayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "release.targetDateUpdated": {
+            "post": {
+                "summary": "release.targetDateUpdated",
+                "description": "When target dates were updated for the release. All platforms.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                }, {
+                                    "type": "object",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookReleasePayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "release.pilotChanged": {
+            "post": {
+                "summary": "release.pilotChanged",
+                "description": "When the release pilot for a release was changed. All platforms.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                }, {
+                                    "type": "object",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookReleasePayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "release.kickoffReminder": {
+            "post": {
+                "summary": "release.kickoffReminder",
+                "description": "When a reminder is sent that your release is scheduled to be kicked off soon. All platforms.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                }, {
+                                    "type": "object",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookReleasePayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "release.submitReminder": {
+            "post": {
+                "summary": "release.submitReminder",
+                "description": "When a reminder is sent that your update is scheduled to be submitted for review soon. iOS and Android platforms only.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                }, {
+                                    "type": "object",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookReleasePayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "release.releaseReminder": {
+            "post": {
+                "summary": "release.releaseReminder",
+                "description": "When a reminder is sent that your update is scheduled to be released soon. iOS platforms only.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                }, {
+                                    "type": "object",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookReleasePayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "release.stepsReadyToSubmit": {
+            "post": {
+                "summary": "release.stepsReadyToSubmit",
+                "description": "When all required release steps are complete; your app update is ready to submit for review. iOS and Android platforms only.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                }, {
+                                    "type": "object",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookReleaseStepsPayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "release.stepsReadyToRelease": {
+            "post": {
+                "summary": "release.stepsReadyToRelease",
+                "description": "When all required release steps are complete; your app update is ready to release. iOS platforms only.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                }, {
+                                    "type": "object",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookReleaseStepsPayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "releaseStep.statusChanged": {
+            "post": {
+                "summary": "releaseStep.statusChanged",
+                "description": "When the status of a release step in Runway has changed. All platforms.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                }, {
+                                    "type": "object",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookReleaseStepsPayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "appStoreVersion.statusUpdated": {
+            "post": {
+                "summary": "appStoreVersion.statusUpdated",
+                "description": "When the status of an app store version has changed. iOS and Android platforms only.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                }, {
+                                    "type": "object",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookAppStoreVersionDataPayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "appStoreVersion.phasedReleaseUpdated": {
+            "post": {
+                "summary": "appStoreVersion.phasedReleaseUpdated",
+                "description": "When the status of a phased/staged rollout has changed. iOS and Android platforms only.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                }, {
+                                    "type": "object",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookAppStoreVersionDataPayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "checklistItem.statusChanged": {
+            "post": {
+                "summary": "checklistItem.statusChanged",
+                "description": "When the status of a checklist item, regression testing item, or approval item has changed. All platforms.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                }, {
+                                    "type": "object",
+                                    "description": "The event's payload",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookChecklistItemPayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "ciBuild.statusChanged": {
+            "post": {
+                "summary": "ciBuild.statusChanged",
+                "description": "When the status of a CI build changes.",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                },
+                                {
+                                    "type": "object",
+                                    "description": "The event's payload",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookCIBuildPayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        },
+        "ciBuild.appStoreBuildAssociated": {
+            "post": {
+                "summary": "ciBuild.appStoreBuildAssociated",
+                "description": "When an app store build is found and associated with a CI build",
+                "tags": ["webhooks"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [{
+                                    "$ref": "#/components/schemas/WebhookPayload"
+                                },
+                                {
+                                    "type": "object",
+                                    "description": "The event's payload",
+                                    "properties": {
+                                        "payload": {
+                                            "$ref": "#/components/schemas/WebhookCIBuildPayload"
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return a 200 status to indicate that the data was received successfully"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "WebhookPayload": {
+                "type": "object",
+                "required": ["eventType", "wasAutomatedByRunway", "payload"],
+                "properties": {
+                    "eventType": {
+                        "type": "string",
+                        "description": "The type of event that was sent"
+                    },
+                    "wasAutomatedByRunway": {
+                        "type": "boolean",
+                        "description": "True if the event happened as a result of an action automated by Runway"
+                    },
+                }
+            },
+            "WebhookAppPayload": {
+                "type": "object",
+                "properties": {
+                    "app": {
+                        "description": "The app that the event occurred on",
+                        "$ref": "#/components/schemas/AppEntity"
+                    }
+                }
+            },
+            "WebhookReleasePayload": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/WebhookAppPayload"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "release": {
+                                "description": "The release that the event occurred on",
+                                "$ref": "#/components/schemas/ReleaseEntity"
+                            }
+                        }
+                    }
+                ]
+            },
+            "WebhookCIBuildPayload": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/WebhookReleasePayload"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "build": {
+                                "description": "The build whose status changed",
+                                "$ref": "#/components/schemas/CIBuildEntity"
+                            }
+                        }
+                    }
+                ]
+            },
+            "WebhookReleaseStepsPayload": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/WebhookReleasePayload"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "releaseSteps": {
+                                "type": "array",
+                                "description": "The release step(s) that were affected",
+                                "items": {
+                                    "$ref": "#/components/schemas/ReleaseStepEntity"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "WebhookAppStoreVersionDataPayload": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/WebhookReleasePayload"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "appStoreVersionData": {
+                                "description": "The app store version data that was affected",
+                                "$ref": "#/components/schemas/AppStoreVersionData"
+                            }
+                        }
+                    }
+                ]
+            },
+            "WebhookChecklistItemPayload": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/WebhookReleasePayload"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "checklistItem": {
+                                "description": "The checklist item that was affected",
+                                "$ref": "#/components/schemas/ChecklistItemEntity"
+                            }
+                        }
+                    }
+                ]
+            },
+            "AppStoreVersionData": {
+                "type": "object",
+                "discriminator": {
+                    "propertyName": "type"
+                },
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/AppleAppStoreData"
+                    },
+                    {
+                        "$ref": "#/components/schemas/GooglePlayStoreData"
+                    }
+                ]
+            },
+            "AppEntity": {
+                "type": "object",
+                "required": ["id", "appName", "platform"],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The id of the app entity",
+                        "example": "fake-app"
+                    },
+                    "appName": {
+                        "type": "string",
+                        "description": "The name of the app",
+                        "example": "Fake app"
+                    },
+                    "platform": {
+                        "description": "The app's platform",
+                        "$ref": "#/components/schemas/AppPlatform"
+                    }
+                }
+            },
+            "AppPlatform": {
+                "type": "string",
+                "description": "The app's platform",
+                "enum": ["ios", "android", "ios-sdk", "android-sdk", "react-native-ota"]
+            },
+            "ReleaseStatus": {
+                "type": "string",
+                "description": "The status of a release",
+                "enum": ["active", "completed", "canceled"]
+            },
+            "ReleaseType": {
+                "type": "string",
+                "description": "The type of release",
+                "enum": ["major", "minor", "point", "hotfix"]
+            },
+            "ReleaseTimelinePhase": {
+                "type": "string",
+                "description": "The timeline phase of the release",
+                "enum": ["upcoming", "current", "completed"]
+            },
+            "ReleaseStepType": {
+                "type": "string",
+                "description": "The type of release step",
+                "enum": [
+                    "kickoff",
+                    "featureReadiness",
+                    "releaseCandidate",
+                    "regressionTesting",
+                    "betaTesting",
+                    "metadata",
+                    "screenshots",
+                    "approvals",
+                    "submission",
+                    "storeReview",
+                    "takeoff",
+                    "ciDistribution"
+                ]
+            },
+            "ReleaseEntity": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "version",
+                    "status",
+                    "type",
+                    "timelinePhase",
+                    "isReleaseTagged",
+                    "isSubmitted",
+                    "isKickedOff",
+                    "isReleased",
+                    "createdAt"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The id of the release entity",
+                        "example": "fake-app:1.0.0"
+                    },
+                    "version": {
+                        "type": "string",
+                        "description": "The release version",
+                        "example": "1.0.0"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/ReleaseStatus"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/ReleaseType"
+                    },
+                    "timelinePhase": {
+                        "$ref": "#/components/schemas/ReleaseTimelinePhase"
+                    },
+                    "isReleaseTagged": {
+                        "type": "boolean",
+                        "description": "Indicates whether the release has been tagged in VCS"
+                    },
+                    "isKickedOff": {
+                        "type": "boolean",
+                        "description": "Indicates whether the release has been kicked off in Runway"
+                    },
+                    "isSubmitted": {
+                        "type": "boolean",
+                        "description": "Indicates whether the release has been submitted for review in the app store"
+                    },
+                    "isReleased": {
+                        "type": "boolean",
+                        "description": "Indicates whether the release has been released to users. For iOS platforms, this corresponds to the App Store status being 'READY_FOR_SALE'. For Android platforms, this corresponds to the version's status being 'inProgress' or 'completed'"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "description": "The date and time when the release was created in Runway",
+                        "format": "date-time",
+                        "example": "2022-03-02T01:15:47.588206559Z"
+                    },
+                    "releasePilotId": {
+                        "type": "string",
+                        "description": "The release pilot for the release",
+                        "example": "sully@example.com"
+                    },
+                    "targetKickoffDate": {
+                        "type": "string",
+                        "description": "The target kickoff date and time for the release",
+                        "format": "date-time",
+                        "example": "2022-03-02T01:15:47.588206559Z"
+                    },
+                    "targetSubmissionDate": {
+                        "type": "string",
+                        "description": "The target submission date and time for the release",
+                        "format": "date-time",
+                        "example": "2022-03-02T01:15:47.588206559Z"
+                    },
+                    "targetReleaseDate": {
+                        "type": "string",
+                        "description": "The target submission date and time for the release",
+                        "format": "date-time",
+                        "example": "2022-03-02T01:15:47.588206559Z"
+                    },
+                    "releaseBranch": {
+                        "type": "string",
+                        "description": "The detected release branch for the release",
+                        "example": "release-1.0.0"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "description": "The date and time when the release was last updated in Runway",
+                        "format": "date-time",
+                        "example": "2022-03-02T01:15:47.588206559Z"
+                    },
+                    "kickedOffAt": {
+                        "type": "string",
+                        "description": "The date and time when the release was kicked off in Runway",
+                        "format": "date-time",
+                        "example": "2022-03-02T01:15:47.588206559Z"
+                    },
+                    "submittedAt": {
+                        "type": "string",
+                        "description": "The date and time when the a build for the release was submitted for review",
+                        "format": "date-time",
+                        "example": "2022-03-02T01:15:47.588206559Z"
+                    },
+                    "releasedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The date and time when a build for the release was made available to users.  For iOS platforms, this corresponds to the App Store status being 'READY_FOR_SALE'. For Android platforms, this corresponds to the version's status being 'inProgress' or 'completed'",
+                        "example": "2022-03-02T01:15:47.588206559Z"
+                    },
+                    "completedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-03-02T01:15:47.588206559Z",
+                        "description": "The date and time when the release was marked as completed in Runway. For iOS and Android platforms, this corresponds to the date on which a build was released to users based on the app store status. For other platforms, it corresponds to the date and time on which the production CI/CD workflow successfully completed for the first time."
+                    }
+                }
+            },
+            "CIBuildEntity": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "buildIdentifier",
+                    "integrationId",
+                    "url",
+                    "startedAt",
+                    "status",
+                    "providerStatusString",
+                    "commitHash",
+                    "workflowRunIds",
+                    "branch",
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The id of the entity",
+                        "example": "acb-123"
+                    },
+                    "buildIdentifer": {
+                        "type": "string",
+                        "description": "The identifier of the build as set by the integration provider",
+                        "example": "123"
+                    },
+                    "appStoreBuildIdentifier": {
+                        "type": "string",
+                        "description": "The identifier of the app store build corresponding to this CI build",
+                        "example": "123"
+                    },
+                    "integrationId": {
+                        "description": "The integration type associated with the build",
+                        "$ref": "#/components/schemas/IntegrationType"
+                    },
+                    "url": {
+                        "type": "string",
+                        "description": "The link out to the build",
+                        "example": "https://integration.com/123"
+                    },
+                    "startedAt": {
+                        "type": "string",
+                        "description": "The start date and time of the build",
+                        "format": "date-time",
+                        "example": "2022-03-02T01:15:47.588206559Z"
+                    },
+                    "finishedAt": {
+                        "type": "string",
+                        "description": "The end date and time of the build",
+                        "format": "date-time",
+                        "example": "2022-03-02T01:15:47.588206559Z"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/CIBuildStatus",
+                    },
+                    "providerStatusString": {
+                        "type": "string",
+                        "description": "The status of the build returned by the integration provider",
+                        "example": "In progress"
+                    },
+                    "commitHash": {
+                        "type": "string",
+                        "description": "The commit hash of that triggered the build",
+                        "example": "abcdef"
+                    },
+                    "commitMessage": {
+                        "type": "string",
+                        "description": "The commit message associated with the commit hash that triggered the build",
+                    },
+                    "commitAuthor": {
+                        "type": "string",
+                        "description": "The author of the commit that triggered the build",
+                    },
+                    "workflowRunIds": {
+                        "type": "array",
+                        "description": "Array of IDs of the workflow(s) run as part of the build",
+                    },
+                    "branch": {
+                        "type": "string",
+                        "description": "The branch the build was triggered off of",
+                        "example": "main"
+                    },
+
+                }
+            },
+            "IntegrationType": {
+                "type": "string",
+                "description": "The types of integrations",
+                "enum": ["apple",
+                "bitrise",
+                "firebase",
+                "circleci",
+                "github-ci",
+                "github-it",
+                "github",
+                "github-vcs-dist",
+                "gitlab-ci",
+                "gitlab-vcs",
+                "google",
+                "jenkins",
+                "jira",
+                "linear",
+                "slack",
+                "apple-beta",
+                "google-beta",
+                "pivotal",
+                "bugsnag",
+                "sentry",
+                "testrail",
+                "travis",
+                "buildkite",
+                "shortcut",
+                "asana",
+                "bitbucket",
+                "xray",
+                "appcenter-ci",
+                "amplitude"]
+            },
+            "ReleaseStepStatus": {
+                "type": "string",
+                "description": "The status of a release step",
+                "enum": ["ready", "pending", "pendingChecklist", "blocked", "inactive"]
+            },
+            "CIBuildStatus": {
+                "type": "string",
+                "description": "The build status of a CI build in Runway. Runway maps the provider's build status to one of these options.",
+                "enum": ["inProgress", "stopped", "success", "failure", "skipped"]
+            },
+            "ReleaseStepEntity": {
+                "type": "object",
+                "required": ["type", "status", "statusReasonString"],
+                "properties": {
+                    "type": {
+                        "$ref": "#/components/schemas/ReleaseStepType"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/ReleaseStepStatus"
+                    },
+                    "statusReasonString": {
+                        "type": "string",
+                        "description": "The user-friendly description of the reason for the status of the step"
+                    }
+                }
+            },
+            "ChecklistItemStatusType": {
+                "type": "string",
+                "description": "All possible statuses for a checklist item",
+                "enum": ["approved", "rejected", "inProgress", "blocked", "passed", "failed"]
+            },
+            "ChecklistItemStatus": {
+                "type": "object",
+                "description": "The status of a checklist item",
+                "required": ["status", "createdBy", "createdAt"],
+                "properties": {
+                    "status": {
+                        "description": "The checklist item status key. For binary placement checklist items, the status will always be `approved` if set",
+                        "$ref": "#/components/schemas/ChecklistItemStatusType"
+                    },
+                    "createdBy": {
+                        "type": "string",
+                        "description": "The userId (email) of the user that created the checklist item"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "description": "The date and time the checklist item was created",
+                        "format": "date-time",
+                        "example": "2022-03-02T01:15:47.588206559Z"
+                    }
+                }
+            },
+            "UserRole": {
+                "type": "string",
+                "description": "The list of possible roles a user can have. Users can have multiple roles",
+                "enum": ["pilot", "engineer", "pm", "qa", "design", "em", "marketing", "cx", "ops", "approver"]
+            },
+            "ChecklistItemComment": {
+                "type": "object",
+                "description": "A comment on a checklist item",
+                "properties": {
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdBy": {
+                        "type": "string",
+                        "description": "The user id (email) of the user that added the comment"
+                    },
+                    "comment": {
+                        "type": "string",
+                        "description": "The comment string. Can be markdown."
+                    }
+                }
+            },
+            "ChecklistItemEntity": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "title",
+                    "approverRoles",
+                    "releaseType",
+                    "notifyEnabled",
+                    "statuses",
+                    "placement"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The identifier of the checklist item"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "The title of the checklist item",
+                        "example": "Gather new release notes"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "The description of the checklist item. Accepts markdown.",
+                        "example": "Contact sully@demo.com on the copywriting team to get new release notes together."
+                    },
+                    "approverRoles": {
+                        "type": "array",
+                        "description": "The list of user roles that can approve this checklist item",
+                        "items": {
+                            "$ref": "#/components/schemas/UserRole"
+                        }
+                    },
+                    "releaseType": {
+                        "type": "string",
+                        "description": "The type of release this checklist item will appear on",
+                        "enum": ["all", "hotfixOnly", "rollbackOnly", "allExceptHotfix"]
+                    },
+                    "notifyEnabled": {
+                        "type": "boolean",
+                        "description": "Whether the checklist item will notify on Slack when its status changes"
+                    },
+                    "statuses": {
+                        "type": "array",
+                        "description": "The list of possible checklist item status types for this checklist item. A subset of all possible ChecklistItemStatusType values",
+                        "items": {
+                            "$ref": "#/components/schemas/ChecklistItemStatusType"
+                        }
+                    },
+                    "releaseStepType": {
+                        "description": "The release step that the checklist item appears on. Will be `null` if the placement of the item is not `binary`.",
+                        "$ref": "#/components/schemas/ReleaseStepType"
+                    },
+                    "oneOffForVersion": {
+                        "type": "string",
+                        "description": "If the checklist item only applies for a single release version, this field will contain the version string for that version",
+                        "example": "1.1.0"
+                    },
+                    "status": {
+                        "description": "The status of the checklist item. Will be `null` if a binary placement checklist item is not complete, or when a status has not been set yet",
+                        "$ref": "#/components/schemas/ChecklistItemStatus"
+                    },
+                    "placement": {
+                        "description": "The placement of the checklist item",
+                        "$ref": "#/components/schemas/ChecklistItemPlacement"
+                    },
+                    "comment": {
+                        "$ref": "#/components/schemas/ChecklistItemComment"
+                    }
+                }
+            },
+            "ChecklistItemPlacement": {
+                "type": "string",
+                "description": "The placement of a given checklist item",
+                "enum": ["stepChecklist", "approvals", "regressionTesting"]
+            },
+            "GoogleStagedRollout": {
+                "type": "object",
+                "description": "The staged rollout details for a versioned Android release",
+                "required": ["state"],
+                "properties": {
+                    "state": {
+                        "$ref": "#/components/schemas/GooglePlayVersionState"
+                    },
+                    "userFraction": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                    }
+                }
+            },
+            "GooglePlayVersionState": {
+                "type": "string",
+                "description": "The Google Play Developer API status of the versioned release, can be one of a number of [release statuses](https://developers.google.com/android-publisher/api-ref/rest/v3/edits.tracks#Status)"
+            },
+            "GooglePlayStoreData": {
+                "type": "object",
+                "required": ["type", "state"],
+                "properties": {
+                    "type": {
+                        "$ref": "#/components/schemas/AppStoreDataType"
+                    },
+                    "state": {
+                        "$ref": "#/components/schemas/GooglePlayVersionState"
+                    },
+                    "phasedRelease": {
+                        "description": "The staged rollout details for the release. Will be null if the release is not a staged rollout",
+                        "$ref": "#/components/schemas/GoogleStagedRollout"
+                    }
+                }
+            },
+            "ApplePhasedRelease": {
+                "type": "object",
+                "description": "The phased release details for a given version release",
+                "required": ["state", "dayNumber"],
+                "properties": {
+                    "state": {
+                        "type": "string",
+                        "description": "The phased release state for the update, can be one of a number of [phased release states](https://developer.apple.com/documentation/appstoreconnectapi/phasedreleasestate) defined by Apple"
+                    },
+                    "dayNumber": {
+                        "type": "number",
+                        "description": "The phased release day",
+                        "minimum": 1,
+                        "maximum": 7
+                    },
+                    "startDate": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The date the phased release began"
+                    }
+                }
+            },
+            "AppStoreDataType": {
+                "type": "string",
+                "description": "The type of app store data",
+                "enum": ["AppleAppStoreData", "GooglePlayStoreData"]
+            },
+            "AppleAppStoreData": {
+                "type": "object",
+                "required": ["type", "releaseType", "state"],
+                "properties": {
+                    "type": {
+                        "$ref": "#/components/schemas/AppStoreDataType"
+                    },
+                    "releaseType": {
+                        "type": "string",
+                        "description": "The release type in ASC for the release"
+                    },
+                    "earliestReleaseDate": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "the earliest release date that the update will be released on, set if the release type is `SCHEDULED`. If the update is approved before the earliest release date, it will be released automatically on the `earliestReleaseDate`"
+                    },
+                    "state": {
+                        "type": "string",
+                        "description": "The ASC state of the release, can be one of a number of [version states](https://developer.apple.com/documentation/appstoreconnectapi/appstoreversionstate) defined by Apple."
+                    },
+                    "phasedRelease": {
+                        "description": "The phased release details for the release. Will be `null` if the release is not a phased released release (set to release updates to all users)",
+                        "$ref": "#/components/schemas/ApplePhasedRelease"
+                    }
+                }
+            },
+            "Error": {
+                "type": "object",
+                "required": [
+                    "code",
+                    "message"
+                ],
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BaseReleaseUpdateRequestBody": {
+                "type": "object",
+                "required": [
+                    "version",
+                ],
+                "properties": {
+                    "version": {
+                        "type": "string",
+                        "example": "1.1.0"
+                    },
+                    "isHotfix": {
+                        "description": "Whether the release should be considered a hotfix by Runway. Defaults to false.",
+                        "type": "boolean",
+                        "example": false,
+                    },
+                    "targetKickoffDate": {
+                        "description": "The target submission date for the release. All platforms. Pass `null` to clear the date.",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-03-02T01:15:47.588206559Z"
+                    },
+                    "targetSubmitDate": {
+                        "description": "The target submission date for the release. iOS and Android platforms only. Pass `null` to clear the date.",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-03-02T01:15:47.588206559Z"
+                    },
+                    "targetReleaseDate": {
+                        "description": "The target release date for the release. iOS platforms only. Pass `null` to clear the date.",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2022-03-02T01:15:47.588206559Z"
+                    },
+                    "releasePilotId": {
+                        "description": "The user id (email) of the release pilot for the release. Pass the string `'fromRota'` to set the release pilot based on the pilot rotation schedule. Pass `null` to clear the release pilot.",
+                        "type": "string",
+                        "example": "sully@example.com"
+                    }
+                }
+            },
+            "UpdateChecklistItemStatusRequestBody": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "$ref": "#/components/schemas/ChecklistItemStatusType",
+                        "description": "The checklist item's updated status. Pass null to clear the status.",
+                    }
+                }
+            },
+            "CreateApprovalRequestBody": {
+                "type": "object",
+                "required": [
+                    "title"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Title of the approval item"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description of the approval item"
+                    },
+                    "approverRoles": {
+                        "type": "array",
+                        "description": "The list of user roles that can approve this item",
+                        "items": {
+                            "$ref": "#/components/schemas/UserRole"
+                        }
+                    },
+                    "owners": {
+                        "type": "array",
+                        "description": "List of user ids allowed to approve item",
+                        "items": {
+                            "type":"string"
+                        }
+                    },
+                    "notifyEnabled": {
+                        "type": "boolean",
+                        "description": "Will send a notification when approval is updated."
+                    },
+                    "oneOffForVersion": {
+                        "type": "string",
+                        "description": "Nullable, approval item will only appear in this version"
+                    }
+                }
+            },
+            "CreateChecklistItemRequestBody": {
+                "type": "object",
+                "required": [
+                    "title",
+                    "releaseStep"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Title of the checklist item"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Description of the checklist item"
+                    },
+                    "releaseStep": {
+                        "description": "The release step that the checklist item appears on",
+                        "$ref": "#/components/schemas/ReleaseStepType"
+                    },
+                    "approverRoles": {
+                        "type": "array",
+                        "description": "The list of user roles that can approve this checklist item",
+                        "items": {
+                            "$ref": "#/components/schemas/UserRole"
+                        }
+                    },
+                    "owners": {
+                        "type": "array",
+                        "description": "List of user ids allowed to approve item",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "notifyEnabled": {
+                        "type": "boolean",
+                        "description": "Will send a notification when approval is updated."
+                    },
+                    "oneOffForVersion": {
+                        "type": "string",
+                        "description": "Nullable, checklist item will only appear in this version"
+                    }
+                }
+            }
+        },
+        "parameters": {
+            "releaseId": {
+                "name": "releaseId",
+                "in": "path",
+                "description": "The id of the release. Constructed from the app's `id` and the release version like so: `{appId}:{version}`",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "appId": {
+                "name": "appId",
+                "in": "path",
+                "description": "The app the release is part of",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            },
+            "checklistItemId": {
+                "name": "checklistItemId",
+                "in": "path",
+                "description": "The id of the checklist item being updated",
+                "required": true,
+                "schema": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses": {
+            "releaseResponse": {
+                "description": "A release response",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ReleaseEntity"
+                        }
+                    }
+                }
+            },
+            "releasesResponse": {
+                "description": "A list of releases",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/ReleaseEntity"
+                            }
+                        }
+                    }
+                }
+            },
+            "checklistItemResponse": {
+                "description": "A checklist item response",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/ChecklistItemEntity"
+                        }
+                    }
+                }
+            },
+            "notFoundErrorResponse": {
+                "description": "Resource not found response",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        }
+                    }
+                }
+            },
+            "badRequestErrorResponse": {
+                "description": "Bad request response",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "requestBodies": {
+            "createRelease": {
+                "description": "The request body for creating a new release",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/BaseReleaseUpdateRequestBody"
+                        },
+                    }
+                },
+                "required": true
+            },
+            "updateRelease": {
+                "description": "The request body for updating a release",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/BaseReleaseUpdateRequestBody"
+                        },
+                    }
+                },
+                "required": true
+            },
+            "updateChecklistItemStatus": {
+                "description": "The request body to update the status of a checklist item",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateChecklistItemStatusRequestBody"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "createApproval": {
+                "description": "The request body for creating a new approval item",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/CreateApprovalRequestBody"
+                        }
+                    }
+                },
+                "required": true
+            },
+            "createChecklistItem": {
+                "description": "The request body for creating a new step checklist item",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/CreateChecklistItemRequestBody"
+                        }
+                    }
+                },
+                "required": true
+            }
+        },
+        "securitySchemes": {
+            "apiKey": {
+                "type": "apiKey",
+                "description": "You can create an API key from the organization settings page in your team's Runway dashboard. Include your API key with any requests to the Runway API like so: `X-API-Key: ${API_KEY}`.",
+                "name": "X-API-Key",
+                "in": "header"
+            }
+        }
+    }
+}
