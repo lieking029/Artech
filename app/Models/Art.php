@@ -12,31 +12,55 @@ class Art extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'user_id',
-        'category_id',
-        'status',
-    ];
+    protected $fillable = ['title', 'user_id', 'category_id', 'status', 'sale', 'price', 'description'];
 
-    public function user() : BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function likes() : HasMany
+    public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
     }
 
-    public function category() : BelongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function artImages() : HasMany
+    public function artImages(): HasMany
     {
         return $this->hasMany(ArtImage::class);
     }
 
+    public function scopeFilter($query, array $searchTerm)
+    {
+        if ($searchTerm['art'] ?? false) {
+            $query->where(function ($query) {
+                $query->where('title', 'like', '%' . request('art') . '%')->orWhere('description', 'like', '%' . request('art') . '%');
+            });
+        }
+
+        if ($searchTerm['selectRange'] ?? false) {
+            $query->where(function ($query) use ($searchTerm) {
+                if ($searchTerm['selectRange'] === '0-3000') {
+                    // Filter for range 0 - 3000
+                    $query->whereBetween('price', [0, 3000]);
+                } elseif ($searchTerm['selectRange'] === '3000-above') {
+                    // Filter for range 3000 and above
+                    $query->where('price', '>=', 3000);
+                }
+            });
+        }
+        if ($searchTerm['saleSelect'] ?? false) {
+            if ($searchTerm['saleSelect'] === '0') {
+                // Filter for 'Not for Sale'
+                $query->where('sale', 0); // Assuming 'for_sale' is the column name
+            } elseif ($searchTerm['saleSelect'] === '1') {
+                // Filter for 'For Sale'
+                $query->where('sale', 1); // Assuming 'for_sale' is the column name
+            }
+        }
+    }
 }

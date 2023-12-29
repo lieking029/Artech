@@ -17,7 +17,10 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->string('title');
+            $table->string('description')->nullable();
             $table->integer('status');
+            $table->integer('sale')->nullable();
+            $table->double('price')->nullable();
             $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

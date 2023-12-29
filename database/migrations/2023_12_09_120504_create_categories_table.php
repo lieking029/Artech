@@ -20,11 +20,21 @@ return new class extends Migration
         });
 
         Category::insert([
-            ['name' => 'Art 1'],
-            ['name' => 'Art 2'],
-            ['name' => 'Art 3'],
+            ['name' => 'Realism'],
+            ['name' => 'Impressionism'],
+            ['name' => 'Expressionism'],
+            ['name' => 'Abstract Art'],
+            ['name' => 'Cubism'],
+            ['name' => 'Surrealism'],
+            ['name' => 'Pop Art'],
+            ['name' => 'Minimalism'],
+            ['name' => 'Fauvism'],
+            ['name' => 'Renaissance Art'],
+            ['name' => 'Baroque Art'],
+            ['name' => 'Romanticism'],
+            ['name' => 'Modernism'],
+            ['name' => 'Contemporary Art'],
         ]);
-
     }
 
     /**

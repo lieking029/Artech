@@ -26,6 +26,9 @@ class StoreArtRequest extends FormRequest
             'category_id' => ['exists:categories,id'],
             'image' => ['required', 'array'],
             'image.*' => ['required', 'file'],
+            'sale' => ['required', 'integer'],
+            'price' => ['nullable', 'integer'],
+            'description' => ['required', 'string', 'max:255'],
         ];
     }
 }

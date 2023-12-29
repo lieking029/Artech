@@ -1,11 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArtController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MyPostController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VirtualGalleryController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,18 +25,15 @@ Route::get('/', function () {
 
 Auth::routes();
 
-
-
 Route::middleware('auth')->group(function () {
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
     // COMMON AND AUTHENTICATED
-    Route::resource('virtual-gallery', VirtualGalleryController::class)->only('index');
+    Route::get('/search', [SearchController::class, 'index'])->name('search.index');
+    Route::get('/home', [VirtualGalleryController::class, 'index'])->name('home');
     Route::resource('art', ArtController::class)->except('index');
-    Route::resource('like', LikeController::class)->only('store');
+    Route::post('/like/{id}', [LikeController::class, 'toggleLike']);
     Route::resource('my-post', MyPostController::class)->only('index');
 
-    Route::middleware('role:admin')->group(function() {
+    Route::middleware('role:admin')->group(function () {
         Route::get('admin-home', [HomeController::class, 'adminHome'])->name('admin.home');
         Route::post('art-admin', [ArtController::class, 'adminStore'])->name('art.admin');
         Route::get('art', [ArtController::class, 'index'])->name('art.index');
@@ -43,8 +41,7 @@ Route::middleware('auth')->group(function () {
         Route::get('disapproved/{art}', [ArtController::class, 'disapproved'])->name('art.disapproved');
     });
 
-    Route::middleware('role:client')->group(function() {
-
+    Route::middleware('role:client')->group(function () {
     });
 
     Route::view('about', 'about')->name('about');

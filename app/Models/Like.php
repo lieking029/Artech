@@ -12,18 +12,18 @@ class Like extends Model
 
     protected $fillable = [
         'art_id',
-        'user_id'
+        'user_id',
+        'likes',
     ];
 
 
-    public function art() : BelongsTo
+    public function art(): BelongsTo
     {
         return $this->belongsTo(Art::class);
     }
 
-    public function user() : BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-
 }

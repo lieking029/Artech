@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
+            $table->integer('likes')->default(0);
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Art::class)->constrained()->cascadeOnDelete();
             $table->timestamps();

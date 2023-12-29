@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\UserTypeEnum;
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Models\Art;
+use App\Models\User;
+use App\Models\Category;
+use App\Enums\UserTypeEnum;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -26,7 +27,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $categories = Category::all();
+
+        return view('home', compact('categories'));
     }
 
     public function adminHome()
