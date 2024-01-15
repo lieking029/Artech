@@ -96,9 +96,29 @@
                 <h5 class="text-white">Filters</h5>
                 <div class="row">
                     <div class="col-2">
+                        <label for="category" class="text-white">Category</label>
+                        <select name="category" id="category" class="form-select">
+                            <option value="All" {{ request('category') === 'All' ? 'selected' : '' }}>All</option>
+                            <option value="Realism" {{ request('category') === 'Realism' ? 'selected' : '' }}>Realism</option>
+                            <option value="Impressionism" {{ request('category') === 'Impressionism' ? 'selected' : '' }}>Impressionism</option>
+                            <option value="Expressionism" {{ request('category') === 'Expressionism' ? 'selected' : '' }}>Expressionism</option>
+                            <option value="Abstract Art" {{ request('category') === 'Abstract Art' ? 'selected' : '' }}>Abstract Art</option>
+                            <option value="Cubism" {{ request('category') === 'Cubism' ? 'selected' : '' }}>Cubism</option>
+                            <option value="Surrealism" {{ request('category') === 'Surrealism' ? 'selected' : '' }}>Surrealism</option>
+                            <option value="Pop Art" {{ request('category') === 'Pop Art' ? 'selected' : '' }}>Pop Art</option>
+                            <option value="Minimalism" {{ request('category') === 'Minimalism' ? 'selected' : '' }}>Minimalism</option>
+                            <option value="Fauvism" {{ request('category') === 'Fauvism' ? 'selected' : '' }}>Fauvism</option>
+                            <option value="Renaissance Art" {{ request('category') === 'Renaissance Art' ? 'selected' : '' }}>Renaissance Art</option>
+                            <option value="Baroque Art" {{ request('category') === 'Baroque Art' ? 'selected' : '' }}>Baroque Art</option>
+                            <option value="Romanticism" {{ request('category') === 'Romanticism' ? 'selected' : '' }}>Romanticism</option>
+                            <option value="Modernism" {{ request('category') === 'Modernism' ? 'selected' : '' }}>Modernism</option>
+                            <option value="Contemporary Art" {{ request('category') === 'Contemporary Art' ? 'selected' : '' }}>Contemporary Art</option>
+                        </select>
+                    </div>
+                    <div class="col-2">
                         <label for="saleSelect" class="text-white">Sale</label>
                         <select name="saleSelect" id="saleSelect" class="form-select">
-                            <option value="" class="form-control" disabled>Select</option>
+                            <option value="" class="form-control" selected>All</option>
                             <option value="0" {{ request('saleSelect') === '0' ? 'selected' : '' }}>Not For Sale
                             </option>
                             <option value="1" {{ request('saleSelect') === '1' ? 'selected' : '' }}>Sale</option>
@@ -144,7 +164,7 @@
                 saleRange.value = 0; // Reset range value if not 'Sale' is selected
             }
         });
-        
+
         const baseUrl = '{{ url('') }}';
         $('#artBtn').click(function() {
             fetch(baseUrl + '/art/' + $(this).data('id'))

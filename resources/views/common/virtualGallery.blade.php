@@ -41,8 +41,7 @@
             .title,
             .description,
             .forsale,
-            .price
-            .category {
+            .price .category {
                 font-size: 12px;
                 /* Change this to your desired smaller font size */
             }
@@ -87,7 +86,8 @@
                                 <label class="text-white mx-2">{{ $art->user->name }}</label>
                                 <label for="" class="text-white">• {{ $art->created_at->diffForHumans() }}</label>
                             </div>
-                            <h6 class="text-white mx-4 mt-3 category" style=" white-space: nowrap;">{{$art->category->name}}</h6>
+                            <h6 class="text-white mx-4 mt-3 category" style=" white-space: nowrap;">
+                                {{ $art->category->name }}</h6>
                         </div>
                         <div class="carousel-inner">
                             @foreach ($art->artImages as $index => $artImage)
@@ -114,7 +114,31 @@
                             </div>
                             <div class="price">
                                 <label for="" class="text-white">
-                                    {{ $art->sale == 1 ? 'For Sale ₱ ' . number_format($art->price, 2, '.', ',') : ($art->price !== 0 ? 'Not For Sale' : null) }}</label>
+                                    @if ($art->sale == 1)
+                                        @if ($art->price == 0)
+                                            For Sale
+                                        @else
+                                            For Sale ₱ {{ number_format($art->price, 2, '.', ',') }}
+                                            <button class="addToCart btn" style="background-color: white"
+                                                data-art-id="{{ $art->id }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="icon-tabler icon-tabler-shopping-cart text-black" width="24"
+                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                    stroke="currentColor" fill="none" stroke-linecap="round"
+                                                    stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                    <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                    <path d="M17 17h-11v-14h-2" />
+                                                    <path d="M6 5l14 1l-1 7h-13" />
+                                                </svg>
+                                            </button>
+                                        @endif
+                                    @elseif ($art->sale == 3)
+                                        Sold
+                                    @else
+                                        Not For Sale
+                                    @endif
                             </div>
                         </div>
                         <h5 for="" class="text-white mt-2 title">{{ $art->title }}</h5>
@@ -192,6 +216,27 @@
                     }
                 });
             });
+
+            $('.addToCart').on('click', function() {
+                const artId = $(this).data('art-id');
+
+                $.ajax({
+                    url: `/add/${artId}`, // corrected 'artId' variable instead of 'art-id' string
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                    },
+                    success: function(response) {
+                        console.log('add to cart');
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error if the item couldn't be added to the cart
+                        console.error('Error adding item to cart:', error);
+                        // You can show an error message or take appropriate action
+                    }
+                });
+            });
+
         });
 
         document.addEventListener('DOMContentLoaded', function() {

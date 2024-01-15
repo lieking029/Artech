@@ -17,7 +17,7 @@ class SearchController extends Controller
         $categories = Category::all();
 
         $arts = Art::with('user', 'artImages')
-            ->filter(request(['art', 'saleSelect', 'selectRange']))
+            ->filter(request(['art', 'saleSelect', 'selectRange', 'category']))
             ->get();
 
         $search = request('art');

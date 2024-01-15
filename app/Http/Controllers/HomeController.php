@@ -34,10 +34,11 @@ class HomeController extends Controller
 
     public function adminHome()
     {
+        $categories = Category::all();
         $artsUploaded = Art::where('status', 1)->count();
         $artsPending = Art::where('status', 0)->count();
         $clients = User::role(UserTypeEnum::Client)->count();
 
-        return view('admin.dashboard', compact('artsUploaded', 'artsPending', 'clients'));
+        return view('admin.dashboard', compact('artsUploaded', 'artsPending', 'clients', 'categories'));
     }
 }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreArtRequest;
 use App\Models\Art;
 use App\Models\ArtImage;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreArtRequest;
 
 class ArtController extends Controller
 {
@@ -14,9 +15,12 @@ class ArtController extends Controller
      */
     public function index()
     {
-        $arts = Art::where('status', 0)->get();
+        $categories = Category::all();
+        $arts = Art::with('artImages')
+            ->where('status', 0)
+            ->get();
 
-        return view('admin.artPrompt.pending', compact('arts'));
+        return view('admin.artPrompt.pending', compact('arts', 'categories'));
     }
 
     /**
@@ -50,7 +54,7 @@ class ArtController extends Controller
     {
         Art::create($request->only('title', 'category_id') + ['user_id' => auth()->id(), 'image' => $request->file('image')->store('arts', 'public'), 'status' => 1]);
 
-        return redirect()->route('virtual-gallery.index');
+        return redirect()->route('home');
     }
 
     /**
@@ -86,7 +90,7 @@ class ArtController extends Controller
     {
         $art->delete();
 
-        return redirect()->route('virtual-gallery.index');
+        return redirect()->route('client.myPost.index');
     }
 
     public function approved(Art $art)

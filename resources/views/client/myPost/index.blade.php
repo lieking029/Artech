@@ -41,8 +41,7 @@
             .title,
             .description,
             .forsale,
-            .price
-            .category {
+            .price .category {
                 font-size: 12px;
                 /* Change this to your desired smaller font size */
             }
@@ -66,7 +65,8 @@
                                 <label class="text-white mx-2">{{ $art->user->name }}</label>
                                 <label for="" class="text-white">• {{ $art->created_at->diffForHumans() }}</label>
                             </div>
-                            <h6 class="text-white mx-4 mt-3 category" style=" white-space: nowrap;">{{$art->category->name}}</h6>
+                            <h6 class="text-white mx-4 mt-3 category" style=" white-space: nowrap;">
+                                {{ $art->category->name }}</h6>
                         </div>
                         <div class="carousel-inner">
                             @foreach ($art->artImages as $index => $artImage)
@@ -80,18 +80,47 @@
                             @endforeach
                         </div>
                         <div class="d-flex mt-3 justify-content-between mx-2 me-2">
-                            <div class="">
+                            <div class="d-flex">
                                 <span class="like-container" data-art-id="{{ $art->id }}"
                                     data-liked="{{ $art->likes->where('user_id', auth()->id())->count() > 0 ? 'true' : 'false' }}"
                                     style="cursor: pointer;">
                                     <i class="{{ $art->likes->where('user_id', auth()->id())->count() > 0 ? 'fas' : 'far' }} fa-star text-white star-icon"
                                         id="starIcon_{{ $art->id }}" style="font-size: 25px"></i>
                                     <span class="text-white like-count">{{ $art->likes->count() }}</span>
-                                </span>   
+                                </span>
+                                <button style="border: none; background: none; padding: 0; margin: 0; cursor: pointer;"
+                                    data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ $art->id }}"
+                                    class="edit-button">
+                                    <i class="fas fa-pen mx-2" style="color: white; font-size: 25px"></i>
+                                </button>
+                                <form method="POST" action="{{ route('art.sold', $art->id) }}">
+                                    @csrf
+                                    <button type="submit"
+                                        style="border: none; background: none; padding: 0; margin: 0; cursor: pointer;">
+                                        <i class="fas fa-money-bill mx-2" style="color: white; font-size: 25px"></i>
+                                    </button>
+                                </form>
+                                <form method="POST" action="{{ route('mypost.destroy', $art->id) }}">
+                                    @csrf
+                                    <button type="submit"
+                                        style="border: none; background: none; padding: 0; margin: 0; cursor: pointer;">
+                                        <i class="fas fa-trash mx-2" style="color: white; font-size: 25px"></i>
+                                    </button>
+                                </form>
                             </div>
                             <div class="price">
                                 <label for="" class="text-white">
-                                    {{ $art->sale == 1 ? 'For Sale ₱ ' . number_format($art->price, 2, '.', ',') : ($art->price !== 0 ? 'Not For Sale' : null) }}</label>
+                                    @if ($art->sale == 1)
+                                        @if ($art->price == 0)
+                                            For Sale
+                                        @else
+                                            For Sale ₱ {{ number_format($art->price, 2, '.', ',') }}
+                                        @endif
+                                    @elseif ($art->sale == 3)
+                                        Sold
+                                    @else
+                                        Not For Sale
+                                    @endif
                             </div>
                         </div>
                         <h5 for="" class="text-white mt-2 title">{{ $art->title }}</h5>
@@ -101,6 +130,8 @@
                 </div>
             @endforeach
         </div>
+
+        {{-- MODAL --}}
 
         <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
@@ -134,6 +165,83 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- MODAL --}}
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-white" style="background: #242526">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create</h5>
+                    <a class="btn-close" href="{{ route('mypost.index') }}"></a>
+                </div>
+                <form action="{{ route('art.update', $art->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="" class="mb-2">Art Category</label>
+                            <select name="category_id" id="editCategory" class="form-select">
+                                <option value="" selected disabled>Select Category</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @error('title')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                        <div class="form-group mt-3">
+                            <label for="" class="mb-2">Art Title</label>
+                            <input type="text" placeholder="Title" name="title" class="form-control"
+                                id="editTitle">
+                        </div>
+                        @error('title')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                        <div class="form-group mt-3">
+                            <label for="image" class="mb-2">Your ART</label>
+                            <div class="upload-box" onclick="document.getElementById('formFileMultiple').click();">
+                                <p>Click to upload files</p>
+                            </div>
+                            <input class="form-control d-none" name="image[]" type="file" id="formFileMultiple"
+                                multiple>
+                        </div>
+                        @error('image.*')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                        <div class="form-group mt-3">
+                            <label for="sale" class="mb-2" id="editSale">Sale</label>
+                            <select name="sale" id="sale" class="form-select">
+                                <option id="not-for-sale" value="0" selected>Not For Sale</option>
+                                <option id="for-sale" value="1">For Sale</option>
+                            </select>
+                        </div>
+                        @error('sale')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                        <div id="priceInput" style="display: none;" class="form-group mt-3">
+                            <label for="price" class="mb-2">Price</label>
+                            <input type="number" name="price" id="price" class="form-control"
+                                placeholder="Price" id="editPrice" value="{{ $art->price }}">
+                        </div>
+                        @error('price')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                        <div class="form-group mt-3">
+                            <label for="" class="mb-2">Description</label>
+                            <textarea type="text" name="description" class="form-control" placeholder="Description" id="editDescription"></textarea>
+                        </div>
+                        @error('description')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-secondary" href="{{ route('mypost.index') }}">Close</a>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -190,6 +298,38 @@
                         var updatedLikeCount = currentLikeCount + 1;
                         likeCountSpan.textContent = updatedLikeCount;
                         this.setAttribute('data-liked', 'true'); // Toggle liked status
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function() {
+            $('.edit-button').click(function() {
+                var artId = $(this).data('id');
+
+                // Ajax request to fetch art details
+                $.ajax({
+                    url: '/artValue/' + artId,
+                    type: 'GET',
+                    success: function(data) {
+                        // Update modal form fields with fetched data
+                        $('#editTitle').val(data.title);
+                        $('#editCategory').val(data.category_id);
+                        // Set the selected sale option based on data.sale
+                        if (data.sale === 1) {
+                            $('#sale').val('1'); // 'For Sale'
+                            $('#priceInput').show();
+                        } else {
+                            $('#sale').val('0'); // 'Not For Sale'
+                        }
+                        $('#editDescription').val(data.description);
+
+                        // Show the modal
+                        $('#editModal').modal('show');
+                        console.log(data)
+                    },
+                    error: function() {
+                        alert('Error fetching art details.');
                     }
                 });
             });

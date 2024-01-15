@@ -12,7 +12,16 @@ class Art extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'user_id', 'category_id', 'status', 'sale', 'price', 'description'];
+    protected $fillable =
+    [
+        'title',
+        'user_id',
+        'category_id',
+        'status',
+        'sale',
+        'price',
+        'description'
+    ];
 
     public function user(): BelongsTo
     {
@@ -34,6 +43,11 @@ class Art extends Model
         return $this->hasMany(ArtImage::class);
     }
 
+    public function cart()
+    {
+        return $this->hasOne(Cart::class, 'art_id');
+    }
+
     public function scopeFilter($query, array $searchTerm)
     {
         if ($searchTerm['art'] ?? false) {
@@ -53,6 +67,7 @@ class Art extends Model
                 }
             });
         }
+
         if ($searchTerm['saleSelect'] ?? false) {
             if ($searchTerm['saleSelect'] === '0') {
                 // Filter for 'Not for Sale'
@@ -61,6 +76,13 @@ class Art extends Model
                 // Filter for 'For Sale'
                 $query->where('sale', 1); // Assuming 'for_sale' is the column name
             }
+        }
+
+        if ($searchTerm['category'] ?? false) {
+            $query->whereHas('category', function ($q) use ($searchTerm) {
+                // Assuming 'category_name' is the field in the Category model used for category names
+                $q->where('name', $searchTerm['category']);
+            });
         }
     }
 }

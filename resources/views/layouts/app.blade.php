@@ -59,6 +59,9 @@
                 <ul class="header-nav ms-auto">
 
                 </ul>
+                <a href="{{ route('cart.index') }}">
+                    <i class="fas fa-shopping-bag text-white fa-2x"></i>
+                </a>
                 <ul class="header-nav ms-3">
                     <li class="nav-item dropdown">
                         <a class="nav-link py-0 text-white" data-coreui-toggle="dropdown" href="#" role="button"
