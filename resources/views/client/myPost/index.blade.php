@@ -60,8 +60,13 @@
                     <div class="col-lg-6 col-md-8 col-sm-12">
                         <div class="d-flex justify-content-end mt-4 mb-3">
                             <div class="container">
-                                <img src="{{ asset('icons/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg') }}"
-                                    alt="img" class="rounded-circle profile-image">
+                                @if ($art->user->profile)
+                                    <img src="{{ asset('storage/' . $art->user->profile) }}" alt="img"
+                                        class="rounded-circle profile-image">
+                                @else
+                                    <img src="{{ asset('icons/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg') }}"
+                                        alt="img" class="rounded-circle profile-image">
+                                @endif
                                 <label class="text-white mx-2">{{ $art->user->name }}</label>
                                 <label for="" class="text-white">• {{ $art->created_at->diffForHumans() }}</label>
                             </div>
@@ -170,85 +175,105 @@
     </div>
 
     {{-- MODAL --}}
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content text-white" style="background: #242526">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Create</h5>
-                    <a class="btn-close" href="{{ route('mypost.index') }}"></a>
-                </div>
-                <form action="{{ route('art.update', $art->id) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="" class="mb-2">Art Category</label>
-                            <select name="category_id" id="editCategory" class="form-select">
-                                <option value="" selected disabled>Select Category</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @error('title')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                        <div class="form-group mt-3">
-                            <label for="" class="mb-2">Art Title</label>
-                            <input type="text" placeholder="Title" name="title" class="form-control"
-                                id="editTitle">
-                        </div>
-                        @error('title')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                        <div class="form-group mt-3">
-                            <label for="image" class="mb-2">Your ART</label>
-                            <div class="upload-box" onclick="document.getElementById('formFileMultiple').click();">
-                                <p>Click to upload files</p>
+    @if ($arts->isNotEmpty())
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-white" style="background: #242526">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Create</h5>
+                        <a class="btn-close" href="{{ route('mypost.index') }}"></a>
+                    </div>
+                    <form action="{{ route('art.update', '__ID__') }}" method="POST" enctype="multipart/form-data"
+                        id="editForm">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="" class="mb-2">Art Category</label>
+                                <select name="category_id" id="editCategory" class="form-select">
+                                    <option value="" selected disabled>Select Category</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <input class="form-control d-none" name="image[]" type="file" id="formFileMultiple"
-                                multiple>
+                            @error('title')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                            <div class="form-group mt-3">
+                                <label for="" class="mb-2">Art Title</label>
+                                <input type="text" placeholder="Title" name="title" class="form-control"
+                                    id="editTitle">
+                            </div>
+                            @error('title')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                            <div class="form-group mt-3">
+                                <label for="image" class="mb-2">Your ART</label>
+                                <div class="upload-box" onclick="document.getElementById('formFileMultiple').click();">
+                                    <p>Click to upload files</p>
+                                </div>
+                                <input class="form-control d-none" name="image[]" type="file" id="formFileMultiple"
+                                    multiple>
+                            </div>
+                            @error('image.*')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                            <div class="form-group mt-3">
+                                <label for="sale" class="mb-2" id="editSale">Sale</label>
+                                <select name="sale" id="sale" class="form-select">
+                                    <option id="not-for-sale" value="0" selected>Not For Sale</option>
+                                    <option id="for-sale" value="1">For Sale</option>
+                                </select>
+                            </div>
+                            @error('sale')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                            <div id="priceInput" style="display: none;" class="form-group mt-3">
+                                <label for="price" class="mb-2">Price</label>
+                                <input type="number" name="price" id="price" class="form-control"
+                                    placeholder="Price" id="editPrice" value="{{ $art->price }}">
+                            </div>
+                            @error('price')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                            <div class="form-group mt-3">
+                                <label for="" class="mb-2">Description</label>
+                                <textarea type="text" name="description" class="form-control" placeholder="Description" id="editDescription"></textarea>
+                            </div>
+                            @error('description')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
-                        @error('image.*')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                        <div class="form-group mt-3">
-                            <label for="sale" class="mb-2" id="editSale">Sale</label>
-                            <select name="sale" id="sale" class="form-select">
-                                <option id="not-for-sale" value="0" selected>Not For Sale</option>
-                                <option id="for-sale" value="1">For Sale</option>
-                            </select>
+                        <div class="modal-footer">
+                            <a class="btn btn-secondary" href="{{ route('mypost.index') }}">Close</a>
+                            <button type="submit" class="btn btn-primary">Save</button>
                         </div>
-                        @error('sale')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                        <div id="priceInput" style="display: none;" class="form-group mt-3">
-                            <label for="price" class="mb-2">Price</label>
-                            <input type="number" name="price" id="price" class="form-control"
-                                placeholder="Price" id="editPrice" value="{{ $art->price }}">
-                        </div>
-                        @error('price')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                        <div class="form-group mt-3">
-                            <label for="" class="mb-2">Description</label>
-                            <textarea type="text" name="description" class="form-control" placeholder="Description" id="editDescription"></textarea>
-                        </div>
-                        @error('description')
-                            <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                    <div class="modal-footer">
-                        <a class="btn btn-secondary" href="{{ route('mypost.index') }}">Close</a>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 
     {{-- END MODAL --}}
 
     <script>
+        // JavaScript to dynamically set the action attribute of the form based on the clicked button
+        document.addEventListener('DOMContentLoaded', function() {
+            var editModal = new bootstrap.Modal(document.getElementById('editModal'));
+
+            // Event listener for the edit button click
+            $('.edit-button').on('click', function() {
+                var artId = $(this).data('id');
+                var editFormAction = '{{ route('art.update', '__ID__') }}';
+                editFormAction = editFormAction.replace('__ID__', artId);
+
+                // Set the action attribute of the form dynamically
+                $('#editForm').attr('action', editFormAction);
+
+                // Show the modal
+                editModal.show();
+            });
+        });
         $(document).ready(function() {
             function toggleStarIconShading(starIcon) {
                 if (starIcon.hasClass('far')) {

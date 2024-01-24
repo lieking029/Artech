@@ -1,5 +1,20 @@
 <ul class="sidebar-nav mt-5" data-coreui="navigation" data-simplebar>
 
+
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('home') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-home nav-icon" viewBox="0 0 24 24"
+                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                style="height: 25px">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+            </svg>
+            {{ __('Virtual Gallery') }}
+        </a>
+    </li>
+
     @admin
         <li class="nav-item">
             <a class="nav-link" href="{{ route('admin.home') }}">
@@ -11,21 +26,6 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('home') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-home nav-icon" viewBox="0 0 24 24"
-                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    style="height: 25px">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                    <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                    <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                </svg>
-                {{ __('Virtual Gallery') }}
-            </a>
-        </li>
-
-
-        <li class="nav-item">
             <a class="nav-link" href="{{ route('art.index') }}">
                 <svg class="nav-icon">
                     <use xlink:href="{{ asset('icons/coreui.svg#cil-user') }}"></use>
@@ -33,23 +33,17 @@
                 {{ __('Pending Arts') }}
             </a>
         </li>
-    @endadmin
 
-    @client
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('home') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon-tabler icon-tabler-home nav-icon" viewBox="0 0 24 24"
-                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                    style="height: 25px">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                    <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                    <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+            <a class="nav-link" href="{{ route('table') }}">
+                <svg class="nav-icon">
+                    <use xlink:href="{{ asset('icons/coreui.svg#cil-user') }}"></use>
                 </svg>
-                {{ __('Virtual Gallery') }}
+                {{ __('Pending Top Up') }}
             </a>
         </li>
-    @endclient
+    @endadmin
+
 
     <li class="nav-item">
         <a class="nav-link" href="{{ route('artpromp.index') }}">
@@ -105,9 +99,22 @@
         </a>
     </li>
     <li class="nav-item">
+        <a class="nav-link" href="{{ route('aboutUs') }}">
+            <svg class="nav-icon">
+                <use xlink:href="{{ asset('icons/coreui.svg#cil-user') }}"></use>
+            </svg>
+            {{ __('About Us') }}
+        </a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href="{{ route('mypost.index') }}">
-            <img src="{{ asset('icons/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg') }}" alt="img"
-                style="height:30px" class="rounded-circle mx-1 me-3">
+            @if (auth()->user()->profile)
+                <img src="{{ asset('storage/' . auth()->user()->profile) }}" alt="img"
+                    class="rounded-circle mx-1 me-3" style="height:30px">
+            @else
+                <img src="{{ asset('icons/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg') }}" alt="img"
+                    class="rounded-circle mx-1 me-3" style="height:30px">
+            @endif
             {{ __('Profile') }}
         </a>
     </li>

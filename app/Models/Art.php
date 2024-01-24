@@ -12,16 +12,7 @@ class Art extends Model
 {
     use HasFactory;
 
-    protected $fillable =
-    [
-        'title',
-        'user_id',
-        'category_id',
-        'status',
-        'sale',
-        'price',
-        'description'
-    ];
+    protected $fillable = ['title', 'user_id', 'category_id', 'status', 'sale', 'price', 'description'];
 
     public function user(): BelongsTo
     {
@@ -46,6 +37,11 @@ class Art extends Model
     public function cart()
     {
         return $this->hasOne(Cart::class, 'art_id');
+    }
+
+    public function ownedArt()
+    {
+        return $this->belongsTo(OwnedArt::class);
     }
 
     public function scopeFilter($query, array $searchTerm)

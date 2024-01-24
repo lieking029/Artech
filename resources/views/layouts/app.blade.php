@@ -16,6 +16,7 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
     <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <meta name="theme-color" content="#ffffff">
     @vite('resources/sass/app.scss')
 </head>
@@ -59,6 +60,8 @@
                 <ul class="header-nav ms-auto">
 
                 </ul>
+                <h5 class="text-white mx-4 mt-2">Wallet: ₱{{ number_format(auth()->user()->wallet, 2) }}</h5>
+                <a href="{{ route('topUp.index') }}" class="btn btn-primary mx-4">Top Up</a>
                 <a href="{{ route('cart.index') }}">
                     <i class="fas fa-shopping-bag text-white fa-2x"></i>
                 </a>
@@ -188,6 +191,7 @@
         </div>
     </div>
     <script src="{{ asset('js/coreui.bundle.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
     <script>
         document.getElementById('formFileMultiple').onchange = function() {
             const fileInput = document.getElementById('formFileMultiple');
@@ -215,6 +219,15 @@
                 }
             });
         });
+
+        function addDarkmodeWidget() {
+            new Darkmode().showWidget();
+            const widget = document.querySelector('.darkmode-toggle');
+            const icon = document.createElement('i');
+            icon.classList.add('bi', 'bi-moon');
+            widget.appendChild(icon);
+        }
+        window.addEventListener('load', addDarkmodeWidget);
     </script>
 </body>
 

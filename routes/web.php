@@ -8,6 +8,7 @@ use App\Http\Controllers\ImageGenerationController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MyPostController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\TopUpController;
 use App\Http\Controllers\VirtualGalleryController;
 
 /*
@@ -22,7 +23,11 @@ use App\Http\Controllers\VirtualGalleryController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        return redirect('/home');
+    } else {
+        return view('auth.login');
+    }
 });
 
 Auth::routes();
@@ -48,12 +53,32 @@ Route::middleware('auth')->group(function () {
 
     // Cart
     Route::get('cart', [AddToCartController::class, 'index'])->name('cart.index');
+    Route::get('cart/{cart}/checkout', [AddToCartController::class, 'checkout'])->name('cart.checkout');
     Route::post('cart/{cart}', [AddToCartController::class, 'destroy'])->name('cart.destroy');
 
     // Art Details
     Route::get('/artValue/{id}', [MyPostController::class, 'getArtDetails']);
     Route::post('artUpdate/{art}', [MyPostController::class, 'update'])->name('art.update');
     Route::post('soldArt/{art}', [MyPostController::class, 'artSold'])->name('art.sold');
+
+    // Checkout Gcash
+    Route::get('payment', [AddToCartController::class, 'payment'])->name('gcash.payment');
+
+    // Buy
+    Route::post('buy/{id}', [AddToCartController::class, 'buyProduct'])->name('buy');
+
+    // OWNED ART
+    Route::get('ownedArt/{id}', [AddToCartController::class, 'ownedArt'])->name('owned');
+
+    // TOP UP
+    Route::get('top-up', [TopUpController::class, 'index'])->name('topUp.index');
+    Route::post('top-up/request', [TopUpController::class, 'store'])->name('topUp.store');
+
+    // Table
+    Route::get('TopUp-table', [TopUpController::class, 'table'])->name('table');
+    Route::post('accept/{id}', [TopUpController::class, 'accept'])->name('table.accept');
+    Route::post('reject/{id}', [TopUpController::class, 'reject'])->name('table.reject');
+
 
     Route::middleware('role:admin')->group(function () {
         Route::get('admin-home', [HomeController::class, 'adminHome'])->name('admin.home');
@@ -69,6 +94,7 @@ Route::middleware('auth')->group(function () {
     Route::view('about', 'about')->name('about');
 
     Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+    Route::get('about-us', [HomeController::class, 'aboutUs'])->name('aboutUs');
 
     Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
     Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');

@@ -3,7 +3,8 @@
 @section('content')
     <div class="col-lg-6 ">
         <div class="card-group d-block d-md-flex row">
-            <div class="card col-md-7 p-4 mb-0 bg-transparent rounded-4 text-white" style="backdrop-filter: blur(10px); background-color: rgba(255, 255, 255, 0.1); border: 2px solid white">
+            <div class="card col-md-7 p-4 mb-0 bg-transparent rounded-4 text-white"
+                style="backdrop-filter: blur(10px); background-color: rgba(255, 255, 255, 0.1); border: 2px solid white">
                 <div class="card-body">
                     <h1>{{ __('Login') }}</h1>
                     <form action="{{ route('login') }}" method="POST">
@@ -15,7 +16,7 @@
                                 </svg>
                             </span>
                             <input class="form-control @error('email') is-invalid @enderror" type="text" name="email"
-                                   placeholder="{{ __('Email') }}" required autofocus>
+                                placeholder="{{ __('Email') }}" required autofocus>
                             @error('email')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -29,7 +30,7 @@
                                 </svg>
                             </span>
                             <input class="form-control @error('password') is-invalid @enderror" type="password"
-                                   name="password" placeholder="{{ __('Password') }}" required>
+                                name="password" placeholder="{{ __('Password') }}" required>
                             @error('password')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -38,11 +39,11 @@
                         </div>
                         <div class="row">
                             <div class="col-6">
-                                <button class="btn btn-dark px-4" type="submit">{{ __('Login') }}</button>
+                                <a class="btn btn-secondary px-4" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                <button class="btn btn-dark px-4" type="submit">{{ __('Submit') }}</button>
                             </div>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>

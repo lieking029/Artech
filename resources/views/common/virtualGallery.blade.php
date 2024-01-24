@@ -81,8 +81,13 @@
                     <div class="col-lg-6 col-md-8 col-sm-12">
                         <div class="d-flex justify-content-end mt-4 mb-3">
                             <div class="container">
-                                <img src="{{ asset('icons/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg') }}"
-                                    alt="img" class="rounded-circle profile-image">
+                                @if ($art->user->profile)
+                                    <img src="{{ asset('storage/' . $art->user->profile) }}" alt="img"
+                                        class="rounded-circle profile-image">
+                                @else
+                                    <img src="{{ asset('icons/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg') }}"
+                                        alt="img" class="rounded-circle profile-image">
+                                @endif
                                 <label class="text-white mx-2">{{ $art->user->name }}</label>
                                 <label for="" class="text-white">• {{ $art->created_at->diffForHumans() }}</label>
                             </div>
@@ -119,20 +124,22 @@
                                             For Sale
                                         @else
                                             For Sale ₱ {{ number_format($art->price, 2, '.', ',') }}
-                                            <button class="addToCart btn" style="background-color: white"
-                                                data-art-id="{{ $art->id }}">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="icon-tabler icon-tabler-shopping-cart text-black" width="24"
-                                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                    stroke="currentColor" fill="none" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                    <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                                                    <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                                                    <path d="M17 17h-11v-14h-2" />
-                                                    <path d="M6 5l14 1l-1 7h-13" />
-                                                </svg>
-                                            </button>
+                                            @if ($art->user_id !== auth()->id())
+                                                <button class="addToCart btn" style="background-color: white"
+                                                    data-art-id="{{ $art->id }}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="icon-tabler icon-tabler-shopping-cart text-black"
+                                                        width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                        stroke="currentColor" fill="none" stroke-linecap="round"
+                                                        stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                        <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                        <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                        <path d="M17 17h-11v-14h-2" />
+                                                        <path d="M6 5l14 1l-1 7h-13" />
+                                                    </svg>
+                                                </button>
+                                            @endif
                                         @endif
                                     @elseif ($art->sale == 3)
                                         Sold
@@ -188,6 +195,26 @@
     {{-- END MODAL --}}
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var zoomableImages = document.querySelectorAll('.zoomable-image');
+
+            zoomableImages.forEach(function(image) {
+                image.addEventListener('contextmenu', function(e) {
+                    e.preventDefault(); // Prevent the default right-click context menu
+                });
+            });
+        });
+        $('.addToCart').on('click', function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Item added to cart!',
+                showConfirmButton: false,
+                timer: 1000, // Adjust the duration of the success message
+                didClose: () => {
+                    location.reload(); // Refresh the page when the success message is closed
+                }
+            });
+        });
         $(document).ready(function() {
             function toggleStarIconShading(starIcon) {
                 if (starIcon.hasClass('far')) {

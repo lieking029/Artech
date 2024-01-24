@@ -20,10 +20,19 @@ class ProfileController extends Controller
             auth()->user()->update(['password' => Hash::make($request->password)]);
         }
 
-        auth()->user()->update([
+        $data = [
             'name' => $request->name,
             'email' => $request->email,
-        ]);
+            'facebook' => $request->facebook,
+            'twitter' => $request->twitter,
+            'instagram' => $request->instagram,
+        ];
+
+        if ($request->hasFile('profile')) {
+            $data['profile'] = $request->file('profile')->store('profiles', 'public');
+        }
+
+        auth()->user()->update($data);
 
         return redirect()->back()->with('success', 'Profile updated.');
     }

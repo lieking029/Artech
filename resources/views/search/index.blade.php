@@ -151,6 +151,15 @@
         </div>
     </div>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var zoomableImages = document.querySelectorAll('.overflow-image');
+
+            zoomableImages.forEach(function(image) {
+                image.addEventListener('contextmenu', function(e) {
+                    e.preventDefault(); // Prevent the default right-click context menu
+                });
+            });
+        });
         document.getElementById('saleSelect').addEventListener('change', function() {
             var selectedValue = this.value;
             var rangeContainer = document.getElementById('rangeContainer');

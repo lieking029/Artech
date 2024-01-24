@@ -15,10 +15,10 @@ class MyPostController extends Controller
             ->with('user', 'likes')
             ->get();
         $categories = Category::all();
-        $art = Art::all();
 
         return view('client.myPost.index', compact('arts', 'categories'));
     }
+
     public function destroy(Art $art)
     {
         $art->delete();

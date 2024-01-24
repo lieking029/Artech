@@ -41,4 +41,10 @@ class HomeController extends Controller
 
         return view('admin.dashboard', compact('artsUploaded', 'artsPending', 'clients', 'categories'));
     }
+    public function aboutUs()
+    {
+        $categories = Category::all();
+
+        return view('aboutUs.index', compact('categories'));
+    }
 }

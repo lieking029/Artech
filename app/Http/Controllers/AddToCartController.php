@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Art;
 use App\Models\Cart;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Adyen\Model\Checkout\Amount;
+use Adyen\Service\Checkout\PaymentsApi;
+use Adyen\Model\Checkout\PaymentRequest;
+use Adyen\Model\Checkout\CheckoutPaymentMethod;
+use App\Models\OwnedArt;
+use GuzzleHttp\Promise\Create;
 
 class AddToCartController extends Controller
 {
@@ -16,7 +23,12 @@ class AddToCartController extends Controller
     {
         $categories = Category::all();
 
-        $carts = Cart::where('user_id', auth()->id())->with('art', 'user')->get();
+        $carts = Cart::where('user_id', auth()->id())
+            ->with('art', 'user')
+            ->whereHas('art', function ($query) {
+                $query->where('sale', 1);
+            })
+            ->get();
 
         return view('cart.index', compact('carts', 'categories'));
     }
@@ -58,25 +70,94 @@ class AddToCartController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function checkout($id)
     {
-        //
+        $categories = Category::all();
+
+        $cart = Cart::with('art')->find($id);
+
+        return view('cart.checkout', compact('categories', 'cart'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function payment()
     {
-        //
+        $client = new \Adyen\Client();
+        $client->setApplicationName('Test Application');
+        $client->setEnvironment(\Adyen\Environment::TEST);
+        $client->setXApiKey('AQEhhmfuXNWTK0Qc+iSRoFAdhMwmm6BIO8Yk1jgQiSrw2vrNEMFdWw2+5HzctViMSCJMYAc=-vG+TJD3aO/hlNKimdfu0dgotbELJfwSS0Ye1b035sEs=-7Z>QkmfJ3ECnJS[5');
+
+        // Use the Checkout service for payments
+        $service = new \Adyen\Service\Checkout($client);
+
+        $paymentRequest = new PaymentRequest();
+        $amount = new Amount(); // Create an instance of Amount
+        $amount->setCurrency('PHP');
+        $amount->setValue(10);
+        $paymentRequest->setAmount($amount);
+
+        $paymentRequest->setReference('asd1231asdasd');
+
+        // Create an instance of CheckoutPaymentMethod
+        $checkoutPaymentMethod = new CheckoutPaymentMethod();
+        $checkoutPaymentMethod->setType('gcash');
+        $checkoutPaymentMethod->setNumber('09770835318');
+        $paymentRequest->setPaymentMethod($checkoutPaymentMethod);
+
+        $paymentRequest->setShopperInteraction('Ecommerce');
+        $paymentRequest->setRecurringProcessingModel('CardOnFile');
+        $paymentRequest->setShopperReference('YOUR_SHOPPER_REFERENCE');
+        $paymentRequest->setReturnUrl('https://your-company.com/checkout?shopperOrder=12xy..');
+        $paymentRequest->setMerchantAccount('ARTECHECOM');
+        // Call the payments method with the PaymentRequest object
+
+        $result = $service->payments($paymentRequest);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function buyProduct($id)
     {
-        //
+        $art = Art::find($id);
+        $user = auth()->user();
+
+        if ($art && $user) {
+            $price = $art->price;
+
+            if ($user->wallet >= $price) {
+                // Sufficient funds, proceed with the purchase
+                $user->wallet -= $price;
+                $user->save();
+
+                OwnedArt::create([
+                    'user_id' => $user->id,
+                    'art_id' => $art->id,
+                ]);
+
+                $art->sale = 3;
+                $art->save();
+                $art->user->wallet += $price; // Fixed: Added the price to the art's owner's wallet
+                $art->user->save(); // Fixed: Saved the changes to the art's owner
+
+
+                return redirect()
+                    ->route('cart.index')
+                    ->with('success', 'Purchase successful');
+            } else {
+                // Insufficient funds
+                return redirect()
+                    ->route('cart.index')
+                    ->with('error', 'Insufficient funds');
+            }
+        } else {
+            // Invalid art or user
+            return redirect()
+                ->route('cart.index')
+                ->with('error', 'Invalid art or user');
+        }
     }
 
     /**
@@ -87,5 +168,15 @@ class AddToCartController extends Controller
         $cart->delete();
 
         return redirect()->route('cart.index');
+    }
+
+    public function ownedArt($id)
+    {
+        $categories = Category::all();
+        $ownedArts = OwnedArt::where('user_id', $id)
+            ->with('art')
+            ->get();
+
+        return view('cart.ownedArt', compact('ownedArts', 'categories'));
     }
 }
