@@ -27,7 +27,7 @@
                 <div class="card-footer d-flex justify-content-end">
                     <a class="btn btn-secondary mx-3 mb-3" style="width: 300px">Cancel</a>
                     <button class="btn btn-primary mb-3" style="width: 300px" type="submit">Buy</button>
-                    <a class="btn btn-success mb-3" style="width: 300px" href="{{ url('/chatify' . $cart->art->user->id)}}">Chat with them</a>
+                    <a class="btn btn-success mb-3 mx-3" style="width: 300px" href="{{ url('chatify/' . $cart->art->user->id)}}">Chat with them</a>
                 </div>
             </div>
         </form>

@@ -94,8 +94,8 @@
             <h3 class="text-white">Artech</h3>
             <p class="text-white">Connect with us.</p>
             <div class="d-flex justify-content-around" style="width: 200px;">
-                <a href="#" class="text-white"><i class="fab fa-facebook fa-2x"></i></a>
-                <a href="#" class="text-white"> <i class="fab fa-instagram fa-2x"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=61556156751237" class="text-white"><i class="fab fa-facebook fa-2x"></i></a>
+                <a href="https://www.instagram.com/artech0101/" class="text-white"> <i class="fab fa-instagram fa-2x"></i></a>
                 <a href="#" class="text-white"><i class="fab fa-twitter fa-2x"></i></a>
             </div>
         </div>
