@@ -19,12 +19,14 @@
                         <tbody>
                             @foreach ($topUps as $topUp)
                                 <tr>
-                                    <td><img src="{{ 'storage/' . $topUp->image }}" alt="" srcset=""
-                                            style="width: 300px; height: 300px;"></td>
+                                    <td>
+                                        <img src="{{ 'storage/' . $topUp->image }}" alt="" srcset=""
+                                            style="width: 300px; height: 300px;">
+                                    </td>
                                     <td>{{ $topUp->amount }}</td>
                                     <td class="d-flex">
                                         @admin
-                                            <form action="{{ route('table.accept', $topUp->user_id) }}" method="POST">
+                                            <form action="{{ route('table.accept', $topUp->id) }}" method="POST">
                                                 @csrf
                                                 <button type="submit"
                                                     class="btn btn-primary text-white mx-3"><strong>Accept</strong></button>

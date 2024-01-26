@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Art;
 use App\Models\Cart;
 use App\Models\Category;
+use App\Models\OwnedArt;
 use Illuminate\Http\Request;
+use GuzzleHttp\Promise\Create;
 use Adyen\Model\Checkout\Amount;
 use Adyen\Service\Checkout\PaymentsApi;
+use Illuminate\Support\Facades\Session;
 use Adyen\Model\Checkout\PaymentRequest;
 use Adyen\Model\Checkout\CheckoutPaymentMethod;
-use App\Models\OwnedArt;
-use GuzzleHttp\Promise\Create;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AddToCartController extends Controller
 {
@@ -139,25 +141,14 @@ class AddToCartController extends Controller
 
                 $art->sale = 3;
                 $art->save();
-                $art->user->wallet += $price; // Fixed: Added the price to the art's owner's wallet
-                $art->user->save(); // Fixed: Saved the changes to the art's owner
+                $art->user->wallet += $price;
+                $art->user->save();
 
-
-                return redirect()
-                    ->route('cart.index')
-                    ->with('success', 'Purchase successful');
-            } else {
-                // Insufficient funds
-                return redirect()
-                    ->route('cart.index')
-                    ->with('error', 'Insufficient funds');
+                // Use SweetAlert to display success message
             }
-        } else {
-            // Invalid art or user
-            return redirect()
-                ->route('cart.index')
-                ->with('error', 'Invalid art or user');
         }
+
+        return redirect()->route('cart.index');
     }
 
     /**

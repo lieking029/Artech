@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container-fluid">
-        <form action="{{ route('buy', $cart->art->id) }}" method="POST">
+        <form id="checkoutForm" action="{{ route('buy', $cart->art->id) }}" method="POST">
             @csrf
             <div class="card mt-3" style="background-color: black">
                 <div class="card-header">
@@ -24,12 +24,35 @@
                         </div>
                     </div>
                 </div>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="card-footer d-flex justify-content-end">
-                    <a class="btn btn-secondary mx-3 mb-3" style="width: 300px">Cancel</a>
-                    <button class="btn btn-primary mb-3" style="width: 300px" type="submit">Buy</button>
-                    <a class="btn btn-success mb-3 mx-3" style="width: 300px" href="{{ url('chatify/' . $cart->art->user->id)}}">Chat with them</a>
+                    <a class="btn btn-secondary mx-3 mb-3" style="width: 300px" href="{{ route('cart.index') }}">Cancel</a>
+                    @if (auth()->user()->wallet >= $cart->art->price)
+                        <button class="btn btn-primary mb-3" style="width: 300px" type="submit">Buy</button>
+                    @else
+                        <button class="btn btn-primary mb-3" style="width: 300px" type="button" onclick="notEnoughBalance()">Buy</button>
+                    @endif
+                    <a class="btn btn-success mb-3 mx-3" style="width: 300px"
+                        href="{{ url('chatify/' . $cart->art->user->id) }}">Chat with them</a>
                 </div>
             </div>
         </form>
     </div>
+    <script>
+        function notEnoughBalance() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'You do not have enough balance to make this purchase!',
+            });
+        }
+    </script>
 @endsection

@@ -52,7 +52,16 @@ class ArtController extends Controller
 
     public function adminStore(StoreArtRequest $request)
     {
-        Art::create($request->only('title', 'category_id') + ['user_id' => auth()->id(), 'image' => $request->file('image')->store('arts', 'public'), 'status' => 1]);
+        $art = Art::create($request->only('title', 'category_id', 'sale', 'price', 'description') + ['user_id' => auth()->id(), 'status' => 1]);
+
+        if ($request->hasFile('image')) {
+            foreach ($request->file('image') as $image) {
+                ArtImage::create([
+                    'art_id' => $art->id,
+                    'image' => $image->store('arts', 'public'),
+                ]);
+            }
+        }
 
         return redirect()->route('home');
     }

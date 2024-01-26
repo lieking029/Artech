@@ -75,7 +75,7 @@ class RegisterController extends Controller
             'facebook' => $data['facebook'],
             'instagram' => $data['instagram'],
             'twitter' => $data['twitter'],
-            'profile' => $data['profile']->store('profiles', 'public'),
+            'profile' => isset($data['profile']) ? $data['profile']->store('profiles', 'public') : null,
         ]);
 
         $user->assignRole('client');

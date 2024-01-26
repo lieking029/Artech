@@ -41,7 +41,8 @@
                             <tr>
                                 <td>
                                     <img src="{{ asset('storage/' . $art->artImages->first()->image) }}" height="100"
-                                        width="100" alt="">
+                                        width="100" alt="" class="img-thumbnail art-image" data-toggle="modal"
+                                        data-target="#artModal" style="cursor: pointer;">
                                 </td>
                                 <td>{{ $art->user->name }}</td>
                                 <td>{{ $art->title }}</td>
@@ -51,12 +52,29 @@
                                 </td>
                             </tr>
                         @endforeach
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="artModal" tabindex="-1" role="dialog" aria-labelledby="artModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <img src="{{ asset('storage/' . $art->artImages->first()->image) }}" id="fullScreenImage" class="img-fluid">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </tbody>
                 </table>
             </table>
         </div>
         <script>
             $('#dataTable').DataTable();
+            $('.art-image').on('click', function() {
+                var imageUrl = $(this).attr('src');
+                $('#fullScreenImage').attr('src', imageUrl);
+            });
         </script>
     </div>
 @endsection

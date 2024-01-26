@@ -11,6 +11,7 @@ class VirtualGalleryController extends Controller
 {
     public function index()
     {
+
         $arts = Art::with('user', 'likes')
             ->where('status', 1)
             ->get();

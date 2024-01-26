@@ -40,18 +40,17 @@ class TopUpController extends Controller
         return view('topUp.table', compact('topUps', 'categories'));
     }
 
-    public function accept($userId)
+    public function accept($topUpId)
     {
-        $topUp = TopUp::where('user_id', $userId)->first();
-        $amount = $topUp->amount;
+        $topUp = TopUp::find($topUpId);
 
-        $user = User::find($userId);
+        $amount = $topUp->amount;
+        $user = User::find($topUp->user_id);
 
         $user->wallet += $amount;
         $user->save();
 
-        $topUp->status = 1;
-        $topUp->save();
+        $topUp->delete();
 
         return redirect()->route('table');
     }
@@ -59,8 +58,11 @@ class TopUpController extends Controller
     public function reject($topUpId)
     {
         $topUp = TopUp::find($topUpId);
-        $topUp->status = 2;
-        $topUp->save();
+
+        if ($topUp) {
+            $topUp->delete();
+            alert()->error('Top Up has been rejected');
+        }
 
         return redirect()->route('table');
     }

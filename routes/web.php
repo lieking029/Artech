@@ -76,8 +76,8 @@ Route::middleware('auth')->group(function () {
 
     // Table
     Route::get('TopUp-table', [TopUpController::class, 'table'])->name('table');
-    Route::post('accept/{id}', [TopUpController::class, 'accept'])->name('table.accept');
-    Route::post('reject/{id}', [TopUpController::class, 'reject'])->name('table.reject');
+    Route::post('accept/{topUpId}', [TopUpController::class, 'accept'])->name('table.accept');
+    Route::post('reject/{topUpId}', [TopUpController::class, 'reject'])->name('table.reject');
 
 
     Route::middleware('role:admin')->group(function () {

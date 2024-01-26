@@ -28,6 +28,7 @@ class User extends Authenticatable
         'twitter',
         'profile',
         'password',
+
     ];
 
     /**
@@ -60,14 +61,13 @@ class User extends Authenticatable
         return $this->hasRole('client');
     }
 
-    public function arts() : HasMany
+    public function arts(): HasMany
     {
         return $this->hasMany(Art::class);
     }
 
-    public function likes() : HasOne
+    public function likes(): HasOne
     {
         return $this->hasOne(Like::class);
     }
-
 }
