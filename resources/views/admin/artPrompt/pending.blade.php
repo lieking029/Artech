@@ -51,19 +51,20 @@
                                     <a href="{{ route('art.disapproved', $art->id) }}" class="btn btn-danger">Disapprove</a>
                                 </td>
                             </tr>
-                        @endforeach
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="artModal" tabindex="-1" role="dialog" aria-labelledby="artModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <img src="{{ asset('storage/' . $art->artImages->first()->image) }}" id="fullScreenImage" class="img-fluid">
+                            <div class="modal fade" id="artModal" tabindex="-1" role="dialog"
+                                aria-labelledby="artModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <img src="{{ asset('storage/' . $art->artImages->first()->image) }}"
+                                                id="fullScreenImage" class="img-fluid">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endforeach
+
+                        <!-- Modal -->
 
                     </tbody>
                 </table>

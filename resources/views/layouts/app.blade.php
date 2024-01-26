@@ -18,7 +18,6 @@
     <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
@@ -49,9 +48,7 @@
     </style>
     <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar" style="background: black">
         <div class="sidebar-brand d-none d-md-flex">
-            <svg class="sidebar-brand-full mt-4" width="118" height="46" alt="CoreUI Logo">
-                <use xlink:href="{{ asset('icons/brand.svg#full') }}"></use>
-            </svg>
+                <img src="{{ asset('icons/422586308_931194221947249_7808288288687460354_n.png') }}" alt="" srcset="" style="width: 130px; height:100px;">
             <svg class="sidebar-brand-narrow" width="46" height="46" alt="CoreUI Logo">
                 <use xlink:href="{{ asset('icons/brand.svg#signet') }}"></use>
             </svg>
