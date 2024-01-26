@@ -47,4 +47,12 @@ class HomeController extends Controller
 
         return view('aboutUs.index', compact('categories'));
     }
+
+    public function profile($id)
+    {
+        $arts = Art::where('user_id', $id)->get();
+        $categories = Category::all();
+
+        return view('userProfile.index', compact('arts', 'categories'));
+    }
 }

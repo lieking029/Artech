@@ -46,13 +46,13 @@ class Art extends Model
 
     public function scopeFilter($query, array $searchTerm)
     {
-        if ($searchTerm['art'] ?? false) {
-            $query->where(function ($query) {
-                $query->where('title', 'like', '%' . request('art') . '%')->orWhere('description', 'like', '%' . request('art') . '%');
+        if (isset($searchTerm['art']) && $searchTerm['art'] !== null) {
+            $query->where(function ($query) use ($searchTerm) {
+                $query->where('title', 'like', '%' . $searchTerm['art'] . '%')->orWhere('description', 'like', '%' . $searchTerm['art'] . '%');
             });
         }
 
-        if ($searchTerm['selectRange'] ?? false) {
+        if (isset($searchTerm['selectRange']) && $searchTerm['selectRange'] !== 'all') {
             $query->where(function ($query) use ($searchTerm) {
                 if ($searchTerm['selectRange'] === '0-3000') {
                     // Filter for range 0 - 3000
@@ -64,7 +64,7 @@ class Art extends Model
             });
         }
 
-        if ($searchTerm['saleSelect'] ?? false) {
+        if (isset($searchTerm['saleSelect']) && $searchTerm['saleSelect'] !== 'all') {
             if ($searchTerm['saleSelect'] === '0') {
                 // Filter for 'Not for Sale'
                 $query->where('sale', 0); // Assuming 'for_sale' is the column name
@@ -74,7 +74,7 @@ class Art extends Model
             }
         }
 
-        if ($searchTerm['category'] ?? false) {
+        if (isset($searchTerm['category']) && $searchTerm['category'] !== 'All') {
             $query->whereHas('category', function ($q) use ($searchTerm) {
                 // Assuming 'category_name' is the field in the Category model used for category names
                 $q->where('name', $searchTerm['category']);

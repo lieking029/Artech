@@ -12,15 +12,16 @@ class SearchController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        session()->regenerateToken();
         $categories = Category::all();
 
         $arts = Art::with('user', 'artImages')
-            ->filter(request(['art', 'saleSelect', 'selectRange', 'category']))
+            ->filter($request->only(['art', 'saleSelect', 'selectRange', 'category']))
             ->get();
 
-        $search = request('art');
+        $search = $request->art;
 
         return view('search.index', compact('categories', 'arts', 'search'));
     }

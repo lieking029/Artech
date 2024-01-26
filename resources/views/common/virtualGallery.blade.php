@@ -88,7 +88,8 @@
                                     <img src="{{ asset('icons/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg') }}"
                                         alt="img" class="rounded-circle profile-image">
                                 @endif
-                                <label class="text-white mx-2">{{ $art->user->name }}</label>
+                                <a class="text-white mx-2"
+                                    href="{{ route('profile', $art->user->id) }}">{{ $art->user->name }}</a>
                                 <label for="" class="text-white">• {{ $art->created_at->diffForHumans() }}</label>
                             </div>
                             <h6 class="text-white mx-4 mt-3 category" style=" white-space: nowrap;">

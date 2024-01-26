@@ -79,6 +79,7 @@ Route::middleware('auth')->group(function () {
     Route::post('accept/{topUpId}', [TopUpController::class, 'accept'])->name('table.accept');
     Route::post('reject/{topUpId}', [TopUpController::class, 'reject'])->name('table.reject');
 
+    Route::get('post/{id}', [HomeController::class, 'profile'])->name('profile');
 
     Route::middleware('role:admin')->group(function () {
         Route::get('admin-home', [HomeController::class, 'adminHome'])->name('admin.home');
