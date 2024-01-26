@@ -53,6 +53,32 @@
         }
     </style>
     <div class="container-fluid">
+        <div class="container">
+            @if ($profile->profile)
+                <img src="{{ asset('storage/' . $profile->profile) }}" alt="img" class="rounded-circle profile-image">
+            @else
+                <img src="{{ asset('icons/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg') }}" alt="img"
+                    class="rounded-circle profile-image m-3">
+            @endif
+
+            <label for="" class="text-white">{{ $profile->name }}</label>
+            <label for="" class="text-white m-5">{{$profile->email}}</label>
+            
+
+            <a href="{{ url($profile->facebook) }}" target="_blank" rel="noopener noreferrer" class="text-white">
+                <i class="fab fa-facebook fa-2x m-3"></i>
+                {{ basename(parse_url($profile->facebook, PHP_URL_PATH)) }}
+            </a>
+            <a href="{{ url($profile->instagram) }}" target="_blank" rel="noopener noreferrer" class="text-white">
+                <i class="fab fa-instagram fa-2x m-3"></i>
+                {{ basename(parse_url($profile->instagram, PHP_URL_PATH)) }}
+            </a>
+            <a href="{{ url($profile->twitter) }}" target="_blank" rel="noopener noreferrer" class="text-white">
+                <i class="fab fa-twitter fa-2x m-3"></i>
+                {{ basename(parse_url($profile->twitter, PHP_URL_PATH)) }}
+            </a>
+        </div>
+        <hr>
         <div class="container-fluid" style="width: 100%;">
             @foreach ($arts as $art)
                 <div class="row justify-content-center">

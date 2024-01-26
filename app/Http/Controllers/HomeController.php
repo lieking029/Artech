@@ -51,8 +51,9 @@ class HomeController extends Controller
     public function profile($id)
     {
         $arts = Art::where('user_id', $id)->get();
+        $profile = User::find($id);
         $categories = Category::all();
 
-        return view('userProfile.index', compact('arts', 'categories'));
+        return view('userProfile.index', compact('arts', 'profile', 'categories'));
     }
 }
