@@ -88,11 +88,10 @@
                                     <img src="{{ asset('icons/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg') }}"
                                         alt="img" class="rounded-circle profile-image">
                                 @endif
-                                <a class="text-white mx-2"
-                                    href="{{ route('profile', $art->user->id) }}">{{ $art->user->name }}</a>
-                                <label for="" class="text-white">• {{ $art->created_at->diffForHumans() }}</label>
+                                <a class="mx-2" href="{{ route('profile', $art->user->id) }}" style="color: inherit;">{{ $art->user->name }}</a>
+                                <label for="" style="color: white">• {{ $art->created_at->diffForHumans() }}</label>
                             </div>
-                            <h6 class="text-white mx-4 mt-3 category" style=" white-space: nowrap;">
+                            <h6 class=" mx-4 mt-3 category" style=" white-space: nowrap;">
                                 {{ $art->category->name }}</h6>
                         </div>
                         <div class="carousel-inner">
@@ -111,15 +110,15 @@
                                 <span class="like-container" data-art-id="{{ $art->id }}"
                                     data-liked="{{ $art->likes->where('user_id', auth()->id())->count() > 0 ? 'true' : 'false' }}"
                                     style="cursor: pointer;">
-                                    <i class="{{ $art->likes->where('user_id', auth()->id())->count() > 0 ? 'fas' : 'far' }} fa-star text-white star-icon"
+                                    <i class="{{ $art->likes->where('user_id', auth()->id())->count() > 0 ? 'fas' : 'far' }} fa-star  star-icon"
                                         id="starIcon_{{ $art->id }}" style="font-size: 25px"></i>
-                                    <span class="text-white like-count">{{ $art->likes->count() }}</span>
+                                    <span class=" like-count">{{ $art->likes->count() }}</span>
                                 </span>
-                                <a href="{{ url('chatify/' . $art->user->id) }}"><i class="far fa-comment text-white mx-2"
+                                <a href="{{ url('chatify/' . $art->user->id) }}" style="color: inherit;"><i class="far fa-comment  mx-2"
                                         style="font-size: 25px"></i></a>
                             </div>
                             <div class="price">
-                                <label for="" class="text-white">
+                                <label for="" class="">
                                     @if ($art->sale == 1)
                                         @if ($art->price == 0)
                                             For Sale
@@ -149,9 +148,9 @@
                                     @endif
                             </div>
                         </div>
-                        <h5 for="" class="text-white mt-2 title">{{ $art->title }}</h5>
-                        <p class="text-white m-2 description">{{ $art->description }}</p>
-                        <hr class="text-white">
+                        <h5 for="" class=" mt-2 title">{{ $art->title }}</h5>
+                        <p class=" m-2 description">{{ $art->description }}</p>
+                        <hr class="">
                     </div>
                 </div>
             @endforeach
@@ -159,7 +158,7 @@
 
         <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
-                <div class="modal-content text-white" style="background: #0C0C18">
+                <div class="modal-content " style="background: #0C0C18">
                     <div class="modal-header">
                         <h5 class="modal-title" id="imageModalLabel">Image Gallery</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -168,7 +167,7 @@
                         <div class="d-flex my-2" style="margin-left: 30px">
                             <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/316541946_876752107083217_5841789909563890176_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=efb6e6&_nc_eui2=AeHp6OL09d2UfnUuFcRlp8baIdqJpC8rMSgh2omkLysxKCdoRpbmZRyInp5_zCnXNT8QmYMTBdoAECcciFLtEg89&_nc_ohc=AfNqmO1ixXgAX_D9JHD&_nc_ht=scontent.fmnl25-4.fna&oh=00_AfBTpkbKN3x42b0z_XpMt3ONMYMZMKywAmFhzUodGbtpDQ&oe=657DAE5B"
                                 height="50" width="50" class="rounded-circle" />
-                            <h5 style="margin-left: 20px" class="text-white py-2" id="name"></h5>
+                            <h5 style="margin-left: 20px" class=" py-2" id="name"></h5>
                         </div>
                         <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">

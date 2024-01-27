@@ -2,13 +2,13 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="card mt-3" style="background-color: white">
+        <div class="card mt-3">
             <div class="card-header">
                 <h4>Top Up</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" style="background-color: white">
+                    <table class="table table-bordered" id="dataTable">
                         <thead>
                             <tr>
                                 <td>Image</td>

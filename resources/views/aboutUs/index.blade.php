@@ -2,45 +2,45 @@
 
 @section('content')
     <div class="container-fluid mt-3">
-        <h1 class="text-white m-3">About Us</h1>
+        <h1 class="m-3">About Us</h1>
         <div class="m-5">
-            <h3 class="text-white">ARTECH: Unleashing Creative Potential</h3>
-            <p class="text-white">Welcome to ARTECH, where innovation meets inspiration, and creativity knows no bounds. At
+            <h3>ARTECH: Unleashing Creative Potential</h3>
+            <p>Welcome to ARTECH, where innovation meets inspiration, and creativity knows no bounds. At
                 ARTECH, we understand
                 the challenges faced by visual artists, especially the daunting creative block that hinders the flow of
                 imagination. Our mission is to empower and uplift the visual artists of Muntinlupa City by providing a
                 revolutionary Art Recommendation System that acts as a catalyst for creativity.</p>
-            <hr style="color: #F0F0F0">
-            <h3 class="text-white">Our Vision</h3>
-            <p class="text-white">At ARTECH, we envision a world where every artist, regardless of their background or
+            <hr>
+            <h3>Our Vision</h3>
+            <p>At ARTECH, we envision a world where every artist, regardless of their background or
                 experience, can break free from creative constraints. We aspire to be the driving force behind a thriving
                 community of visual artists, fostering a dynamic and supportive environment that fuels artistic brilliance.
             </p>
-            <hr style="color: #F0F0F0">
-            <h3 class="text-white">The Creative Struggle</h3>
-            <p class="text-white">We recognize the profound impact of creative block on the livelihood and artistic journey
+            <hr>
+            <h3>The Creative Struggle</h3>
+            <p>We recognize the profound impact of creative block on the livelihood and artistic journey
                 of visual artists. The struggle to generate new ideas and find fresh inspiration can lead to stagnation,
                 affecting both the quality of work and an artist's standing in the art world. ARTECH is here to transform
                 this narrative</p>
-            <hr style="color: #F0F0F0">
-            <h3 class="text-white">Our Solution - Art Recommendation System</h3>
-            <p class="text-white">ARTECH introduces a groundbreaking solution - an Art Recommendation System designed
+            <hr>
+            <h3>Our Solution - Art Recommendation System</h3>
+            <p>ARTECH introduces a groundbreaking solution - an Art Recommendation System designed
                 exclusively for visual artists. This system employs advanced algorithms that analyze an artist's previous
                 work, interests, and preferences to suggest a diverse range of prompts. By doing so, we aim to break the
                 monotony, spark creativity, and ignite the passion that drives exceptional artistry.</p>
-            <h3 class="text-white">How It Works</h3>
-            <p class="text-white">Our Art Recommendation System encourages artists to explore new materials, techniques, and
+            <h3>How It Works</h3>
+            <p>Our Art Recommendation System encourages artists to explore new materials, techniques, and
                 themes. By offering a variety of prompts tailored to individual preferences, artists can overcome creative
                 blocks and discover innovative approaches to their craft. Whether you're a seasoned artist looking for a
                 fresh perspective or a newcomer eager to embark on a creative journey, ARTECH is here to guide you.
             </p>
-            <hr style="color: #F0F0F0">
-            <h3 class="text-white">Join the ARTECH Revolution</h3>
-            <p class="text-white">ARTECH is more than a platform; it's a movement to revolutionize the way artists overcome
+            <hr>
+            <h3>Join the ARTECH Revolution</h3>
+            <p>ARTECH is more than a platform; it's a movement to revolutionize the way artists overcome
                 creative challenges. Join us in unleashing your creative potential and transforming the art landscape of
                 Muntinlupa City. Together, let's break the chains of creative block and paint a vibrant future for visual
                 artists.</p>
-            <hr style="color: #F0F0F0">
+            <hr>
         </div>
         <div class="row m-5">
             <div class="col">
@@ -91,29 +91,29 @@
             </div>
         </div>
         <div class="d-flex flex-column align-items-center">
-            <h3 class="text-white">Artech</h3>
-            <p class="text-white">Connect with us.</p>
+            <h3>Artech</h3>
+            <p>Connect with us.</p>
             <div class="d-flex justify-content-around" style="width: 200px;">
-                <a href="https://www.facebook.com/profile.php?id=61556156751237" class="text-white"><i class="fab fa-facebook fa-2x"></i></a>
-                <a href="https://www.instagram.com/artech0101/" class="text-white"> <i class="fab fa-instagram fa-2x"></i></a>
-                <a href="#" class="text-white"><i class="fab fa-twitter fa-2x"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=61556156751237" class="" style="color: inherit;"><i class="fab fa-facebook fa-2x"></i></a>
+                <a href="https://www.instagram.com/artech0101/" class="" style="color: inherit;"> <i class="fab fa-instagram fa-2x"></i></a>
+                <a href="#" class="" style="color: inherit;"><i class="fab fa-twitter fa-2x" ></i></a>
             </div>
         </div>
     </div>
-    <hr style="color: #F0F0F0">
+    <hr>
     <div class="container-fluid">
         <div class="row mt-5">
             <div class="col d-flex flex-column align-items-center">
-                <h5 class="text-white">Phone No</h5>
-                <p class="text-white">(+63) 912 345 6789</p>
+                <h5>Phone No</h5>
+                <p>(+63) 912 345 6789</p>
             </div>
             <div class="col d-flex flex-column align-items-center">
-                <h5 class="text-white">Email</h5>
-                <p class="text-white">artech@gmail.com</p>
+                <h5>Email</h5>
+                <p>artech@gmail.com</p>
             </div>
         </div>
         <div class="d-flex justify-content-center m-5">
-            <label for="" class="text-white"> Copyright © | Pamantasan ng Lungsod ng Muntinlupa | All rights
+            <label for=""> Copyright © | Pamantasan ng Lungsod ng Muntinlupa | All rights
                 reserved</label>
         </div>
     </div>

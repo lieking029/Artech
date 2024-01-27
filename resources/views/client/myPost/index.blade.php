@@ -67,10 +67,10 @@
                                     <img src="{{ asset('icons/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg') }}"
                                         alt="img" class="rounded-circle profile-image">
                                 @endif
-                                <label class="text-white mx-2">{{ $art->user->name }}</label>
-                                <label for="" class="text-white">• {{ $art->created_at->diffForHumans() }}</label>
+                                <label class="mx-2" style="color: inherit;">{{ $art->user->name }}</label>
+                                <label for="" style="color: inherit;">• {{ $art->created_at->diffForHumans() }}</label>
                             </div>
-                            <h6 class="text-white mx-4 mt-3 category" style=" white-space: nowrap;">
+                            <h6 class="mx-4 mt-3 category" style=" white-space: nowrap; color: inherit;">
                                 {{ $art->category->name }}</h6>
                         </div>
                         <div class="carousel-inner">
@@ -89,32 +89,32 @@
                                 <span class="like-container" data-art-id="{{ $art->id }}"
                                     data-liked="{{ $art->likes->where('user_id', auth()->id())->count() > 0 ? 'true' : 'false' }}"
                                     style="cursor: pointer;">
-                                    <i class="{{ $art->likes->where('user_id', auth()->id())->count() > 0 ? 'fas' : 'far' }} fa-star text-white star-icon"
-                                        id="starIcon_{{ $art->id }}" style="font-size: 25px"></i>
-                                    <span class="text-white like-count">{{ $art->likes->count() }}</span>
+                                    <i class="{{ $art->likes->where('user_id', auth()->id())->count() > 0 ? 'fas' : 'far' }} fa-star star-icon"
+                                        id="starIcon_{{ $art->id }}" style="font-size: 25px; color: inherit;"></i>
+                                    <span class="like-count">{{ $art->likes->count() }}</span>
                                 </span>
                                 <button style="border: none; background: none; padding: 0; margin: 0; cursor: pointer;"
                                     data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ $art->id }}"
                                     class="edit-button">
-                                    <i class="fas fa-pen mx-2" style="color: white; font-size: 25px"></i>
+                                    <i class="fas fa-pen mx-2" style="font-size: 25px; color: inherit;"></i>
                                 </button>
                                 <form method="POST" action="{{ route('art.sold', $art->id) }}">
                                     @csrf
                                     <button type="submit"
                                         style="border: none; background: none; padding: 0; margin: 0; cursor: pointer;">
-                                        <i class="fas fa-money-bill mx-2" style="color: white; font-size: 25px"></i>
+                                        <i class="fas fa-money-bill mx-2" style="font-size: 25px; color: inherit;"></i>
                                     </button>
                                 </form>
                                 <form method="POST" action="{{ route('mypost.destroy', $art->id) }}">
                                     @csrf
                                     <button type="submit"
                                         style="border: none; background: none; padding: 0; margin: 0; cursor: pointer;">
-                                        <i class="fas fa-trash mx-2" style="color: white; font-size: 25px"></i>
+                                        <i class="fas fa-trash mx-2" style="font-size: 25px; color: inherit;"></i>
                                     </button>
                                 </form>
                             </div>
                             <div class="price">
-                                <label for="" class="text-white">
+                                <label for="" style="color: inherit;">
                                     @if ($art->sale == 1)
                                         @if ($art->price == 0)
                                             For Sale
@@ -128,8 +128,8 @@
                                     @endif
                             </div>
                         </div>
-                        <h5 for="" class="text-white mt-2 title">{{ $art->title }}</h5>
-                        <p class="text-white m-2 description">{{ $art->description }}</p>
+                        <h5 for="" class="mt-2 title" style="color: inherit;">{{ $art->title }}</h5>
+                        <p class="m-2 description" style="color: inherit;">{{ $art->description }}</p>
                         <hr class="text-white">
                     </div>
                 </div>

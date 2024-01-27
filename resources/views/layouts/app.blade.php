@@ -15,6 +15,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
     </script>
+    <link href="https://cdn.jsdelivr.net/npm/@coreui/coreui@5.0.0-rc.1/dist/css/coreui.min.css" rel="stylesheet"
+        integrity="sha384-6YUohc5ifdoNCo0LbNiTPUr/PgSpk8g4xTkq3gTstOpNuzSI4CPX8jNul1r9kpFV" crossorigin="anonymous">
+
+
     <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@9">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -25,7 +29,7 @@
     @vite('resources/sass/app.scss')
 </head>
 
-<body>
+<body data-coreui-theme="dark">
     <style>
         .upload-box {
             border: 2px dashed #4C5370;
@@ -48,7 +52,8 @@
     </style>
     <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar" style="background: black">
         <div class="sidebar-brand d-none d-md-flex">
-                <img src="{{ asset('icons/422586308_931194221947249_7808288288687460354_n.png') }}" alt="" srcset="" style="width: 130px; height:100px;">
+            <img src="{{ asset('icons/422586308_931194221947249_7808288288687460354_n.png') }}" alt=""
+                srcset="" style="width: 130px; height:100px;">
             <svg class="sidebar-brand-narrow" width="46" height="46" alt="CoreUI Logo">
                 <use xlink:href="{{ asset('icons/brand.svg#signet') }}"></use>
             </svg>
@@ -62,6 +67,10 @@
                 <ul class="header-nav ms-auto">
 
                 </ul>
+                <div class="form-check form-switch mx-4">
+                    <input class="form-check-input p-2" type="checkbox" role="switch" id="flexSwitchCheckChecked"
+                        checked onclick="myFunction()" />
+                </div>
                 <h5 class="text-white mx-4 mt-2">Wallet: ₱{{ number_format(auth()->user()->wallet, 2) }}</h5>
                 <a href="{{ route('topUp.index') }}" class="btn btn-primary mx-4">Top Up</a>
                 <a href="{{ route('cart.index') }}">
@@ -95,7 +104,7 @@
                 </ul>
             </div>
         </header>
-        <div class="body d-flex flex-grow-1 px-0 w-100" style="background: #18191A">
+        <div class="body d-flex flex-grow-1 px-0 w-100">
             <div class="container-fluid p-0 w-100">
                 @yield('content')
             </div>
@@ -192,8 +201,10 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/@coreui/coreui@5.0.0-rc.1/dist/js/coreui.bundle.min.js"
+        integrity="sha384-lm/gmE8U/6Q0duWGAHKfdf8Q0rLLWtCudgbt9aLBgnb5B+iateMBMTOBGSafJbEe" crossorigin="anonymous">
+    </script>
     <script src="{{ asset('js/coreui.bundle.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script>
         document.getElementById('formFileMultiple').onchange = function() {
@@ -222,15 +233,16 @@
                 }
             });
         });
-
-        function addDarkmodeWidget() {
-            new Darkmode().showWidget();
-            const widget = document.querySelector('.darkmode-toggle');
-            const icon = document.createElement('i');
-            icon.classList.add('bi', 'bi-moon');
-            widget.appendChild(icon);
+        function myFunction() {
+            var element = document.body;
+            element.dataset.coreuiTheme =
+                element.dataset.coreuiTheme == "light" ? "dark" : "light";
+            if (element.dataset.coreuiTheme == "dark") {
+                DarkReader.enable();
+            } else {
+                DarkReader.disable();
+            }
         }
-        window.addEventListener('load', addDarkmodeWidget);
     </script>
 </body>
 

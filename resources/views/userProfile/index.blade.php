@@ -61,19 +61,19 @@
                     class="rounded-circle profile-image m-3">
             @endif
 
-            <label for="" class="text-white">{{ $profile->name }}</label>
-            <label for="" class="text-white m-5">{{$profile->email}}</label>
+            <label for="" class="">{{ $profile->name }}</label>
+            <label for="" class=" m-5">{{$profile->email}}</label>
             
 
-            <a href="{{ url($profile->facebook) }}" target="_blank" rel="noopener noreferrer" class="text-white">
+            <a href="{{ url($profile->facebook) }}" target="_blank" rel="noopener noreferrer" class="" style="color: inherit;">
                 <i class="fab fa-facebook fa-2x m-3"></i>
                 {{ basename(parse_url($profile->facebook, PHP_URL_PATH)) }}
             </a>
-            <a href="{{ url($profile->instagram) }}" target="_blank" rel="noopener noreferrer" class="text-white">
+            <a href="{{ url($profile->instagram) }}" target="_blank" rel="noopener noreferrer" class="" style="color: inherit;">
                 <i class="fab fa-instagram fa-2x m-3"></i>
                 {{ basename(parse_url($profile->instagram, PHP_URL_PATH)) }}
             </a>
-            <a href="{{ url($profile->twitter) }}" target="_blank" rel="noopener noreferrer" class="text-white">
+            <a href="{{ url($profile->twitter) }}" target="_blank" rel="noopener noreferrer" class="" style="color: inherit;">
                 <i class="fab fa-twitter fa-2x m-3"></i>
                 {{ basename(parse_url($profile->twitter, PHP_URL_PATH)) }}
             </a>
@@ -92,10 +92,10 @@
                                     <img src="{{ asset('icons/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg') }}"
                                         alt="img" class="rounded-circle profile-image">
                                 @endif
-                                <label class="text-white mx-2">{{ $art->user->name }}</label>
-                                <label for="" class="text-white">• {{ $art->created_at->diffForHumans() }}</label>
+                                <label class=" mx-2">{{ $art->user->name }}</label>
+                                <label for="" class="">• {{ $art->created_at->diffForHumans() }}</label>
                             </div>
-                            <h6 class="text-white mx-4 mt-3 category" style=" white-space: nowrap;">
+                            <h6 class=" mx-4 mt-3 category" style=" white-space: nowrap;">
                                 {{ $art->category->name }}</h6>
                         </div>
                         <div class="carousel-inner">
@@ -114,15 +114,15 @@
                                 <span class="like-container" data-art-id="{{ $art->id }}"
                                     data-liked="{{ $art->likes->where('user_id', auth()->id())->count() > 0 ? 'true' : 'false' }}"
                                     style="cursor: pointer;">
-                                    <i class="{{ $art->likes->where('user_id', auth()->id())->count() > 0 ? 'fas' : 'far' }} fa-star text-white star-icon"
+                                    <i class="{{ $art->likes->where('user_id', auth()->id())->count() > 0 ? 'fas' : 'far' }} fa-star  star-icon"
                                         id="starIcon_{{ $art->id }}" style="font-size: 25px"></i>
-                                    <span class="text-white like-count">{{ $art->likes->count() }}</span>
+                                    <span class=" like-count">{{ $art->likes->count() }}</span>
                                 </span>
-                                <a href="{{ url('chatify/' . $art->user->id) }}"><i class="far fa-comment text-white mx-2"
+                                <a href="{{ url('chatify/' . $art->user->id) }}" style="color: inherit;"><i class="far fa-comment  mx-2"
                                         style="font-size: 25px"></i></a>
                             </div>
                             <div class="price">
-                                <label for="" class="text-white">
+                                <label for="" class="">
                                     @if ($art->sale == 1)
                                         @if ($art->price == 0)
                                             For Sale
@@ -152,9 +152,9 @@
                                     @endif
                             </div>
                         </div>
-                        <h5 for="" class="text-white mt-2 title">{{ $art->title }}</h5>
-                        <p class="text-white m-2 description">{{ $art->description }}</p>
-                        <hr class="text-white">
+                        <h5 for="" class=" mt-2 title">{{ $art->title }}</h5>
+                        <p class=" m-2 description">{{ $art->description }}</p>
+                        <hr class="">
                     </div>
                 </div>
             @endforeach
