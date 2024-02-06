@@ -53,7 +53,7 @@
     <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar" style="background: black">
         <div class="sidebar-brand d-none d-md-flex">
             <img src="{{ asset('icons/422586308_931194221947249_7808288288687460354_n.png') }}" alt=""
-                srcset="" class="img-fluid" style="max-width: 130px; max-height:100px;">
+                srcset="" style="width: 130px; height:100px;">
             <svg class="sidebar-brand-narrow" width="46" height="46" alt="CoreUI Logo">
                 <use xlink:href="{{ asset('icons/brand.svg#signet') }}"></use>
             </svg>
@@ -61,50 +61,45 @@
         @include('layouts.navigation')
         <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>
     </div>
-    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
-        <header class="header header-sticky mb-4" style="background: #18191A">
+    <div class="wrapper d-flex flex-column min-vh-100" style="">
+        <header class="header header-sticky" style="background: #18191A">
             <div class="container-fluid">
-                <button class="header-toggler px-3 d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
-                    <svg class="icon icon-lg">
-                        <use xlink:href="{{ asset('icons/coreui.svg#cil-menu') }}"></use>
-                    </svg>
-                </button>
                 <ul class="header-nav ms-auto">
+
                 </ul>
                 <div class="form-check form-switch mx-4">
                     <input class="form-check-input p-2" type="checkbox" role="switch" id="flexSwitchCheckChecked"
                         checked onclick="myFunction()" />
                 </div>
-                <h5 class="text-white mx-4 mt-2 d-none d-md-block">Wallet: ₱{{ number_format(auth()->user()->wallet, 2) }}</h5>
-                <a href="{{ route('topUp.index') }}" class="btn btn-primary mx-4 d-none d-md-inline-block">Top Up</a>
-                <a href="{{ route('cart.index') }}" class="d-none d-md-inline-block">
+                <h5 class="text-white mx-4 mt-2">Wallet: ₱{{ number_format(auth()->user()->wallet, 2) }}</h5>
+                <a href="{{ route('topUp.index') }}" class="btn btn-primary mx-4">Top Up</a>
+                <a href="{{ route('cart.index') }}">
                     <i class="fas fa-shopping-bag text-white fa-2x"></i>
                 </a>
                 <ul class="header-nav ms-3">
                     <li class="nav-item dropdown">
-                        <a class="nav-link py-0 text-white dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link py-0 text-white" data-coreui-toggle="dropdown" href="#" role="button"
+                            aria-haspopup="true" aria-expanded="false">
                             {{ Auth::user()->name }}
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end pt-0" style="background: rgb(47, 46, 49)" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item text-white" href="{{ route('profile.show') }}">
+                        <div class="dropdown-menu dropdown-menu-end pt-0" style="background: rgb(47, 46, 49)">
+                            <a class="dropdown-item text-white" href="{{ route('profile.show') }}">
                                 <svg class="icon me-2">
                                     <use xlink:href="{{ asset('icons/coreui.svg#cil-user') }}"></use>
                                 </svg>
                                 {{ __('My profile') }}
-                            </a></li>
-                            <li>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button class="dropdown-item text-white" type="submit">
-                                        <svg class="icon me-2">
-                                            <use xlink:href="{{ asset('icons/coreui.svg#cil-account-logout') }}"></use>
-                                        </svg>
-                                        {{ __('Logout') }}
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
+                            </a>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <a class="dropdown-item text-white" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); this.closest('form').submit();">
+                                    <svg class="icon me-2">
+                                        <use xlink:href="{{ asset('icons/coreui.svg#cil-account-logout') }}"></use>
+                                    </svg>
+                                    {{ __('Logout') }}
+                                </a>
+                            </form>
+                        </div>
                     </li>
                 </ul>
             </div>
