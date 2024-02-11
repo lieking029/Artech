@@ -79,7 +79,12 @@ Route::middleware('auth')->group(function () {
     Route::post('accept/{topUpId}', [TopUpController::class, 'accept'])->name('table.accept');
     Route::post('reject/{topUpId}', [TopUpController::class, 'reject'])->name('table.reject');
 
-    Route::get('post/{id}', [HomeController::class, 'profile'])->name('profile');
+    // Cash Out
+    Route::get('cashout-form', [TopUpController::class, 'cashOutForm'])->name('cashout.index');
+    Route::post('storecashout', [TopUpController::class, 'requestCashOut'])->name('request.cashout');
+    Route::get('cashout', [TopUpController::class, 'cashOutTable'])->name('cashout.table');
+    Route::get('cashoutreject/{cashOut}', [TopUpController::class, 'rejectCashOut'])->name('cashout.reject');
+    Route::get('cashoutaccept/{id}', [TopUpController::class, 'acceptCashOut'])->name('cashout.accept');
 
     Route::middleware('role:admin')->group(function () {
         Route::get('admin-home', [HomeController::class, 'adminHome'])->name('admin.home');
@@ -96,7 +101,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
     Route::get('about-us', [HomeController::class, 'aboutUs'])->name('aboutUs');
-
+    Route::get('post/{id}', [HomeController::class, 'profile'])->name('profile');
     Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
     Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 });

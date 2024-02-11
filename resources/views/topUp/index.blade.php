@@ -7,12 +7,16 @@
             <div class="card mt-3" style="background-color: black">
                 <div class="card-header">
                     <h4 class="text-white">Top Up</h4>
+                    <div class="text-end">
+                        <a href="{{route('table')}}" class="btn btn-primary">Status</a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="form-group d-flex flex-column align-items-center">
                         <label for="" class="text-white">Scan Here to Top Up</label>
                         <div class="">
-                            <img src="{{ asset('icons/gcash.jpg') }}" alt="" srcset="" style="width:400px; height:400px;">
+                            <img src="{{ asset('icons/gcash.jpg') }}" alt="" srcset=""
+                                style="width:400px; height:400px;">
                         </div>
                         <div class="">
                             <label for="" class="text-white">Amount</label>

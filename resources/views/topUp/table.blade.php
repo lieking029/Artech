@@ -13,32 +13,68 @@
                             <tr>
                                 <td>Image</td>
                                 <td>Amount</td>
-                                <td>Action</td>
+                                <td>Status</td>
+                                @admin
+                                    <td>Action</td>
+                                @else
+                                @endadmin
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($topUps as $topUp)
-                                <tr>
-                                    <td>
-                                        <img src="{{ 'storage/' . $topUp->image }}" alt="" srcset=""
-                                            style="width: 300px; height: 300px;">
-                                    </td>
-                                    <td>{{ $topUp->amount }}</td>
-                                    <td class="d-flex">
-                                        @admin
-                                            <form action="{{ route('table.accept', $topUp->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit"
-                                                    class="btn btn-primary text-white mx-3"><strong>Accept</strong></button>
-                                            </form>
-                                            <form action="{{ route('table.reject', $topUp->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit"
-                                                    class="btn btn-danger text-white"><strong>Reject</strong></button>
-                                            </form>
-                                        @endadmin
-                                    </td>
-                                </tr>
+                                @if(auth()->user()->hasRole('admin'))
+                                    @if($topUp->status <= 1 || $topUp->user_id == auth()->id())
+                                        <tr>
+                                            <td>
+                                                <img src="{{ 'storage/' . $topUp->image }}" alt="" srcset=""
+                                                    style="width: 300px; height: 300px;">
+                                            </td>
+                                            <td>{{ $topUp->amount }}</td>
+                                            <td>
+                                                @if ($topUp->status == 2)
+                                                    Success
+                                                @elseif($topUp->status == 3)
+                                                    Rejected
+                                                @elseif($topUp->status == 0)
+                                                    Pending
+                                                @endif
+                                            </td>
+                                            @admin
+                                                @if($topUp->status <= 1)
+                                                    <td class="d-flex">
+                                                        <form action="{{ route('table.accept', $topUp->id) }}" method="POST">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                class="btn btn-primary text-white mx-3"><strong>Accept</strong></button>
+                                                        </form>
+                                                        <form action="{{ route('table.reject', $topUp->id) }}" method="POST">
+                                                            @csrf
+                                                            <button type="submit"
+                                                                class="btn btn-danger text-white"><strong>Reject</strong></button>
+                                                        </form>
+                                                    </td>
+                                                @endif
+                                            @endadmin
+                                        </tr>
+                                    @endif
+                                @elseif($topUp->user_id == auth()->id())
+                                    <tr>
+                                        <td>
+                                            <img src="{{ 'storage/' . $topUp->image }}" alt="" srcset=""
+                                                style="width: 300px; height: 300px;">
+                                        </td>
+                                        <td>{{ $topUp->amount }}</td>
+                                        <td>
+                                            @if ($topUp->status == 2)
+                                                Success
+                                            @elseif($topUp->status == 3)
+                                                Rejected
+                                            @elseif($topUp->status == 0)
+                                                Pending
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>

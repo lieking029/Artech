@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\TopUp;
+use App\Models\CashOut;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\TopUpRequest;
+use App\Http\Requests\CashOutRequest;
 
 class TopUpController extends Controller
 {
@@ -40,30 +42,86 @@ class TopUpController extends Controller
         return view('topUp.table', compact('topUps', 'categories'));
     }
 
-    public function accept($topUpId)
+    public function accept($cashoutId)
     {
-        $topUp = TopUp::find($topUpId);
+        $cashout = TopUp::find($cashoutId);
 
-        $amount = $topUp->amount;
-        $user = User::find($topUp->user_id);
+        $amount = $cashout->amount;
+        $user = User::find($cashout->user_id);
 
         $user->wallet += $amount;
         $user->save();
 
-        $topUp->delete();
+        $cashout->status = 2;
+        $cashout->save();
 
         return redirect()->route('table');
     }
 
-    public function reject($topUpId)
+    public function reject($cashoutId)
     {
-        $topUp = TopUp::find($topUpId);
+        $cashout = TopUp::find($cashoutId);
 
-        if ($topUp) {
-            $topUp->delete();
+        if ($cashout) {
+            $cashout->status = 3;
+            $cashout->save();
             alert()->error('Top Up has been rejected');
         }
 
         return redirect()->route('table');
+    }
+    public function requestCashOut(CashOutRequest $request)
+    {
+        $cashOutData = $request->only('cashout', 'number') + ['user_id' => auth()->id(), 'status' => 0];
+
+        $cashOut = CashOut::create($cashOutData);
+
+        return redirect()->route('cashout.table');
+    }
+
+    public function cashOutForm()
+    {
+        $categories = Category::all();
+        return view('cashOut.form', compact('categories'));
+    }
+
+    public function cashOutTable()
+    {
+        $cashout = CashOut::with('user')->get();
+
+        $categories = Category::all();
+
+        return view('cashOut.index', compact('categories', 'cashout'));
+    }
+
+    public function rejectCashOut(CashOut $cashOut)
+    {
+        if ($cashOut) {
+            $cashOut->status = 3;
+            $cashOut->save();
+            alert()->error('Cash Out has been rejected');
+        }
+
+        return redirect()->route('cashout.table');
+    }
+
+    public function acceptCashOut($id)
+    {
+        $cashout = CashOut::find($id);
+
+        $amount = $cashout->cashout;
+        $user = User::find($cashout->user_id);
+
+        if ($user->wallet < $amount) {
+            return redirect()->route('cashout.table');
+        }
+
+        $user->wallet -= $amount;
+        $user->save();
+
+        $cashout->status = 2;
+        $cashout->save();
+
+        return redirect()->route('cashout.table');
     }
 }
