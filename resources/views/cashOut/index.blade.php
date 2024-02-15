@@ -24,29 +24,31 @@
                         <tbody>
                             @foreach ($cashout as $cash)
                                 @if (auth()->user()->hasRole('admin') || $cash->user_id === auth()->user()->id)
-                                    <tr>
-                                        <td>{{ $cash->user->name }}</td>
-                                        <td>{{ $cash->cashout }}</td>
-                                        <td>
-                                            @if ($cash->status == 2)
-                                                Success
-                                            @elseif($cash->status == 3)
-                                                Rejected
-                                            @elseif($cash->status == 0)
-                                                Pending
-                                            @endif
-                                        </td>
-                                        <td>{{ $cash->user->wallet }}</td>
-                                        <td>+63 {{ $cash->number }}</td>
-                                        @admin
+                                    @if (!(auth()->user()->hasRole('admin') && $cash->status > 1))
+                                        <tr>
+                                            <td>{{ $cash->user->name }}</td>
+                                            <td>{{ $cash->cashout }}</td>
                                             <td>
-                                                <a href="{{ route('cashout.reject', $cash->id) }}"
-                                                    class="btn btn-danger">Reject</a>
-                                                <a href="{{ route('cashout.accept', $cash->id) }}"
-                                                    class="btn btn-primary">Accept</a>
+                                                @if ($cash->status == 2)
+                                                    Success
+                                                @elseif($cash->status == 3)
+                                                    Rejected
+                                                @elseif($cash->status == 0)
+                                                    Pending
+                                                @endif
                                             </td>
-                                        @endadmin
-                                    </tr>
+                                            <td>{{ $cash->user->wallet }}</td>
+                                            <td>+63 {{ $cash->number }}</td>
+                                            @admin
+                                                <td>
+                                                    <a href="{{ route('cashout.reject', $cash->id) }}"
+                                                        class="btn btn-danger">Reject</a>
+                                                    <a href="{{ route('cashout.accept', $cash->id) }}"
+                                                        class="btn btn-primary">Accept</a>
+                                                </td>
+                                            @endadmin
+                                        </tr>
+                                    @endif
                                 @endif
                             @endforeach
                         </tbody>
