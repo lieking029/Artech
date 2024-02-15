@@ -37,7 +37,7 @@
                                             @endif
                                         </td>
                                         <td>{{ $cash->user->wallet }}</td>
-                                        <td>{{ $cash->number }}</td>
+                                        <td>+63 {{ $cash->number }}</td>
                                         @admin
                                             <td>
                                                 <a href="{{ route('cashout.reject', $cash->id) }}"

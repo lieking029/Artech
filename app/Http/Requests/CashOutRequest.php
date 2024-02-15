@@ -22,8 +22,8 @@ class CashOutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cashout' => ['int', 'required'],
-            'number' => ['int', 'required'],
+            'cashout' => ['required'],
+            'number' => ['required'],
         ];
     }
 }

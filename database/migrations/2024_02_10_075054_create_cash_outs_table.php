@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->double('cashout');
             $table->integer('status');
-            $table->integer('number');
+            $table->double('number');
             $table
                 ->foreignIdFor(User::class)
                 ->constrained()
