@@ -29,6 +29,7 @@ class StoreArtRequest extends FormRequest
             'sale' => ['required', 'integer'],
             'price' => ['nullable', 'integer'],
             'description' => ['required', 'string', 'max:255'],
+            'indicator' => ['required', 'integer'],
         ];
     }
 }

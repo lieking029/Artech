@@ -42,12 +42,26 @@
             width: 24px;
             heigh: 24px
         }
+
+        #loading-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* Centers the spinner */
+            z-index: 1000;
+            /* Ensures it's on top of other content */
+        }
     </style>
+    <div id="loading-indicator" style="display: none;">
+        <i class="fas fa-spinner fa-spin fa-2x"></i>
+    </div>
     <div class="container-fluid">
         <form method="GET">
             <div class="search-container">
                 <div class="search-box-container">
-                    <input type="search" class="search-box" placeholder="Search" name="prompt" value="{{ request('prompt') }}">
+                    <input type="search" class="search-box" placeholder="Search" name="prompt"
+                        value="{{ request('prompt') }}">
                     <button class="search-icon" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
@@ -81,4 +95,15 @@
             </div>
         @endforeach
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('form').submit(function() {
+                $('#loading-indicator').show();
+                $(document).ajaxComplete(function() {
+                    $('#loading-indicator').hide();
+                });
+            });
+        });
+    </script>
 @endsection

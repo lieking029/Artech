@@ -16,9 +16,7 @@ class ArtController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $arts = Art::with('artImages')
-            ->where('status', 0)
-            ->get();
+        $arts = Art::with('artImages')->where('status', 0)->get();
 
         return view('admin.artPrompt.pending', compact('arts', 'categories'));
     }
@@ -36,7 +34,7 @@ class ArtController extends Controller
      */
     public function store(StoreArtRequest $request)
     {
-        $art = Art::create($request->only('title', 'category_id', 'sale', 'price', 'description') + ['user_id' => auth()->id(), 'status' => 0]);
+        $art = Art::create($request->only('title', 'category_id', 'sale', 'price', 'description', 'indicator') + ['user_id' => auth()->id(), 'status' => 0]);
 
         if ($request->hasFile('image')) {
             foreach ($request->file('image') as $image) {

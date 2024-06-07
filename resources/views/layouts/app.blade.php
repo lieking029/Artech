@@ -79,22 +79,24 @@
                 </a>
                 <ul class="header-nav ms-3">
                     <li class="nav-item dropdown">
-                        <a class="nav-link py-0 text-white dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link py-0 text-white dropdown-toggle" href="#" id="navbarDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ Auth::user()->name }}
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end pt-0" style="background: rgb(47, 46, 49)" aria-labelledby="navbarDropdown">
+                        <ul class="dropdown-menu dropdown-menu-end pt-0" style="background: rgb(47, 46, 49)"
+                            aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item text-white" href="{{ route('profile.show') }}">
-                                <svg class="icon me-2">
-                                    <use xlink:href="{{ asset('icons/coreui.svg#cil-user') }}"></use>
-                                </svg>
-                                {{ __('My profile') }}
-                            </a></li>
+                                    <svg class="icon me-2">
+                                        <use xlink:href="{{ asset('icons/coreui.svg#cil-user') }}"></use>
+                                    </svg>
+                                    {{ __('My profile') }}
+                                </a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <form method="POST" action="{{ route('logout') }}" style="display: none;" id="logout-form">
+                                <form method="POST" action="{{ route('logout') }}" style="display: none;"
+                                    id="logout-form">
                                     @csrf
                                 </form>
                                 <a class="dropdown-item text-white" href="{{ route('logout') }}"
@@ -181,6 +183,16 @@
                             @error('sale')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
+                            <div class="form-group mt-3">
+                                <label for="sale" class="mb-2">Indicator</label>
+                                <select name="indicator" class="form-select">
+                                    <option value="0" selected>Digital</option>
+                                    <option value="1">Physical</option>
+                                </select>
+                            </div>
+                            @error('indicator')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                             <div id="priceInput" style="display: none;" class="form-group mt-3">
                                 <label for="price" class="mb-2">Price</label>
                                 <input type="number" name="price" id="price" class="form-control"
@@ -239,6 +251,7 @@
                 }
             });
         });
+
         function myFunction() {
             var element = document.body;
             element.dataset.coreuiTheme =

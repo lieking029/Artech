@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b087a0870f299d8059759c076965d2c2",
+    "content-hash": "31c31f0f7dfa2995696ce7f0d34dbf2e",
     "packages": [
         {
             "name": "adyen/php-api-library",
@@ -4256,6 +4256,60 @@
                 }
             ],
             "time": "2023-08-07T19:23:17+00:00"
+        },
+        {
+            "name": "sarfraznawaz2005/loading",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sarfraznawaz2005/loading.git",
+                "reference": "554917e0c9649d289328d6d82168848a11f00017"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sarfraznawaz2005/loading/zipball/554917e0c9649d289328d6d82168848a11f00017",
+                "reference": "554917e0c9649d289328d6d82168848a11f00017",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5|~6|~7|~8|~9|~10",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Sarfraznawaz2005\\Loading\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sarfraznawaz2005\\Loading\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sarfraz Ahmed",
+                    "email": "sarfraznawaz2005@gmail.com"
+                }
+            ],
+            "description": "Laravel package to add loading indicator to pages while page is loading.",
+            "keywords": [
+                "indicator",
+                "laravel",
+                "loader",
+                "loading"
+            ],
+            "support": {
+                "issues": "https://github.com/sarfraznawaz2005/loading/issues",
+                "source": "https://github.com/sarfraznawaz2005/loading/tree/1.4.0"
+            },
+            "time": "2023-03-10T13:11:52+00:00"
         },
         {
             "name": "spatie/laravel-permission",

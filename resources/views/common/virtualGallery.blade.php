@@ -88,7 +88,8 @@
                                     <img src="{{ asset('icons/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg') }}"
                                         alt="img" class="rounded-circle profile-image">
                                 @endif
-                                <a class="mx-2" href="{{ route('profile', $art->user->id) }}" style="color: inherit;">{{ $art->user->name }}</a>
+                                <a class="mx-2" href="{{ route('profile', $art->user->id) }}"
+                                    style="color: inherit;">{{ $art->user->name }}</a>
                                 <label for="" style="color: white">• {{ $art->created_at->diffForHumans() }}</label>
                             </div>
                             <h6 class=" mx-4 mt-3 category" style=" white-space: nowrap;">
@@ -114,8 +115,13 @@
                                         id="starIcon_{{ $art->id }}" style="font-size: 25px"></i>
                                     <span class=" like-count">{{ $art->likes->count() }}</span>
                                 </span>
-                                <a href="{{ url('chatify/' . $art->user->id) }}" style="color: inherit;"><i class="far fa-comment  mx-2"
-                                        style="font-size: 25px"></i></a>
+                                <a href="{{ url('chatify/' . $art->user->id) }}" style="color: inherit;"><i
+                                        class="far fa-comment  mx-2" style="font-size: 25px"></i></a>
+                                @if ($art->indicator == 0)
+                                    <label for=""><strong>Digital</strong></label>
+                                @else
+                                    <label for=""><strong>Physical</strong></label>
+                                @endif
                             </div>
                             <div class="price">
                                 <label for="" class="">

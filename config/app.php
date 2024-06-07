@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
+use Sarfraznawaz2005\Loading\Facade as Loading;
+
+
 
 return [
 
@@ -184,6 +187,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'Loading' => Sarfraznawaz2005\Loading\Facade::class
     ])->toArray(),
 
 ];

@@ -12,7 +12,7 @@ class Art extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'user_id', 'category_id', 'status', 'sale', 'price', 'description'];
+    protected $fillable = ['title', 'user_id', 'category_id', 'status', 'sale', 'price', 'description', 'indicator'];
 
     public function user(): BelongsTo
     {
